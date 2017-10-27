@@ -11,7 +11,7 @@ int main() {
 	int ym = scanf("%7s", in_ym);
 	flush();
 	log("DEBUG", "%s\n", ym);
-	if (initTotalWorkHoursStruct(in_ym, total)) goto END_OF_PROGRAM;
+	if (initTotalWorkHoursStruct(in_ym, total)) return 0;
 
 	while(1) {
 		static time_t temp_weeklyWH = (time_t)0;
@@ -24,7 +24,7 @@ int main() {
 		int initWH = initDailyWorkHoursStruct(in_wh, daily);
 
 		if (initWH == 1) break;
-		else if (initWH == 2) goto END_OF_PROGRAM;
+		else if (initWH == 2) return 0;
 		else {
 			if (checkWorkDaily(daily, lastWorkDay, lastWorkWeekday) == FAIL) temp_weeklyWH = (time_t)0;
 			lastWorkDay = getWorkingDate(daily);
@@ -34,7 +34,7 @@ int main() {
 			int culcWH = culcWorkHours(total->yearMonth, daily);
 
 			if (culcWH == 1) continue;
-			else if (culcWH == 2) goto END_OF_PROGRAM;
+			else if (culcWH == 2) return 0;
 
 			total->nomalWH += daily->nomalWH;
 			total->fixedOWH += daily->fixedOWH;
@@ -57,6 +57,5 @@ int main() {
 	log("DEBUG", "%d\n", roundTimeToHour(total->nonlegalHolydayWH));
 	log("DEBUG", "%d\n", roundTimeToHour(total->legalHolydayWH));
 
-END_OF_PROGRAM:
 	return 0;
 }

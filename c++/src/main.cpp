@@ -385,7 +385,7 @@ int main() {
 	//Target Year-Month
 	int ym = scanf("%7s", in_ym);
 	flush();
-	if (isEnd(in_ym) || isError(in_ym)) goto END_OF_PROGRAM;
+	if (isEnd(in_ym) || isError(in_ym)) return 0;
 	total->yearMonth = in_ym;
 
 	total->fixedOWH = (time_t)0;
@@ -405,7 +405,7 @@ int main() {
 		flush();
 
 		if (isEnd(in_wh)) break;
-		else if (isError(in_wh)) goto END_OF_PROGRAM;
+		else if (isError(in_wh)) return 0;
 		else {
 			char *splited[6];
 			struct tm tm_struct;
@@ -421,7 +421,7 @@ int main() {
 
 			int split_count = split(in_wh, " ", splited);
 			daily->yearMonthDay = splited[0];
-			if (split_count < 1) goto END_OF_PROGRAM;
+			if (split_count < 1) return 0;
 			for (j=1; j<split_count+1; j++) {
 				daily->workTime[j-1] = splited[j];
 			}
@@ -441,7 +441,7 @@ int main() {
 			tm_struct.tm_min = 0;
 
 			if ((today_tm = mktime(&tm_struct)) == (time_t)-1)
-				goto END_OF_PROGRAM;
+				return 0;
 
 			atFive = today_tm + FIVE_HOUR;
 			atEight = today_tm + EIGHT_HOUR;
@@ -492,7 +492,7 @@ int main() {
 				tm_struct.tm_hour = hour;
 				tm_struct.tm_min = minute;
 				if ((start_tm = mktime(&tm_struct)) == (time_t)-1)
-					goto END_OF_PROGRAM;
+					return 0;
 
 				//end time
 				hour = atoi(ehm[0]);
@@ -506,7 +506,7 @@ int main() {
 				tm_struct.tm_hour = hour;
 				tm_struct.tm_min = minute;
 				if ((end_tm = mktime(&tm_struct)) == (time_t)-1)
-					goto END_OF_PROGRAM;
+					return 0;
 
 				// 労働時間を計算する
 				if (strncmp(total->yearMonth, daily->yearMonthDay, 7) != 0) {
@@ -630,10 +630,5 @@ int main() {
 	printf("%d\n", roundTimeToHour(total->nonlegalHolydayWH));
 	printf("%d\n", roundTimeToHour(total->legalHolydayWH));
 
-	goto END_OF_PROGRAM;
-
-
-END_OF_PROGRAM:
-	printf("END_OF_PROGRAM\n");
 	return 0;
 }
