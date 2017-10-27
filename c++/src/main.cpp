@@ -373,6 +373,13 @@ int isError(char *input) {
 	return 0;
 }
 
+// void endOfProgram(WorkHours *total) {
+// 	printf("%d\n", roundTimeToHour(total->fixedOWH));
+// 	printf("%d\n", roundTimeToHour(total->legalOWH));
+// 	printf("%d\n", roundTimeToHour(total->midnightOWH));
+// 	printf("%d\n", roundTimeToHour(total->nonlegalHolydayWH));
+// 	printf("%d\n", roundTimeToHour(total->legalHolydayWH));
+// }
 int main() {
 	char *in_ym = (char *)malloc(YEAR_MONTH_LEN+1);
 	char *in_wh = (char *)malloc(WORK_HOURS_LEN+1);
@@ -424,11 +431,14 @@ printf("line%d\n", __LINE__);
 			time_t atTwentyFour;
 			time_t atTwentyNine;
 
-printf("line%d\n", __LINE__);
+printf("line%d:%s\n", __LINE__, in_wh);
 			int split_count = split(in_wh, " ", splited);
 			daily->yearMonthDay = splited[0];
 printf("line%d\n", __LINE__);
-			if (split_count < 1) return 0;
+			if (split_count < 1)  {
+				if (i == 0) return 0;
+				else break;
+			}
 printf("line%d\n", __LINE__);
 			for (j=1; j<split_count+1; j++) {
 printf("line%d\n", __LINE__);
