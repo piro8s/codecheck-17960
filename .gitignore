@@ -3,4 +3,3 @@ java/target/
 scala/target/
 python/**/*.pyc
 c++/**/*.o
-.DS_Store
