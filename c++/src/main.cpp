@@ -1,4 +1,4 @@
-#include<c++/4.2.1/bits/stdc++.h>
+#include<bits/stdc++.h>
 #include "working.h"
 
 int main() {
