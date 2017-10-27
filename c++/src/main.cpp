@@ -379,7 +379,7 @@ int main() {
 
 	int i=0, j=0;
 
-
+printf("%d\n", __LINE__);
 	WorkHours *total = (WorkHours *)malloc(sizeof(WorkHours));
 
 	//Target Year-Month
@@ -387,6 +387,7 @@ int main() {
 	flush();
 	if (isEnd(in_ym) || isError(in_ym)) return 0;
 	total->yearMonth = in_ym;
+printf("%d\n", __LINE__);
 
 	total->fixedOWH = (time_t)0;
 	total->legalOWH = (time_t)0;
@@ -395,18 +396,22 @@ int main() {
 	total->legalHolydayWH = (time_t)0;
 	total->dailyWH = (time_t)0;
 	total->weeklyWH = (time_t)0;
+printf("%d\n", __LINE__);
 
 	time_t temp_weeklyWH = (time_t)0;
 	int lastWorkDay = 0;
 	int lastWorkWeekday = 7;
+printf("%d\n", __LINE__);
 	while(1) {
 		WorkHours *daily = (WorkHours *)malloc(sizeof(WorkHours));
 		scanf("%60[ 0-9/:-]", in_wh);
 		flush();
+printf("%d\n", __LINE__);
 
 		if (isEnd(in_wh)) break;
 		else if (isError(in_wh)) return 0;
 		else {
+printf("%d\n", __LINE__);
 			char *splited[6];
 			struct tm tm_struct;
 			time_t start_tm;
@@ -419,30 +424,41 @@ int main() {
 			time_t atTwentyFour;
 			time_t atTwentyNine;
 
+printf("%d\n", __LINE__);
 			int split_count = split(in_wh, " ", splited);
 			daily->yearMonthDay = splited[0];
+printf("%d\n", __LINE__);
 			if (split_count < 1) return 0;
+printf("%d\n", __LINE__);
 			for (j=1; j<split_count+1; j++) {
+printf("%d\n", __LINE__);
 				daily->workTime[j-1] = splited[j];
 			}
 
+printf("%d\n", __LINE__);
 			char *ymd[3], ymd_temp[strlen(splited[0])+1];
 			int year, month, day, hour, minute, dayStride;
+printf("%d\n", __LINE__);
 			strcpy(ymd_temp, splited[0]);
+printf("%d\n", __LINE__);
 			split(ymd_temp, "/", ymd);
+printf("%d\n", __LINE__);
 			year = atoi(ymd[0]);
 			month = atoi(ymd[1]);
 			day = atoi(ymd[2]);
 
+printf("%d\n", __LINE__);
 			tm_struct.tm_year = year - 1900;
 			tm_struct.tm_mon = month - 1;
 			tm_struct.tm_mday = day;
 			tm_struct.tm_hour = 0;
 			tm_struct.tm_min = 0;
 
+printf("%d\n", __LINE__);
 			if ((today_tm = mktime(&tm_struct)) == (time_t)-1)
 				return 0;
 
+printf("%d\n", __LINE__);
 			atFive = today_tm + FIVE_HOUR;
 			atEight = today_tm + EIGHT_HOUR;
 			atSixTeen = today_tm + SIXTEEN_HOUR;
@@ -450,9 +466,11 @@ int main() {
 			atTwentyFour = today_tm + TWENTY_FOUR_HOUR;
 			atTwentyNine = today_tm + TWENTY_NINE_HOUR;
 
+printf("%d\n", __LINE__);
 			daily->weekdayNum = subZeller(today_tm);
 			daily->tmorrowWeekdayNum = subZeller(today_tm + ONE_DAY);
 
+printf("%d\n", __LINE__);
 			daily->nomalWH = (time_t)0;
 			daily->fixedOWH = (time_t)0;
 			daily->legalOWH = (time_t)0;
@@ -460,29 +478,45 @@ int main() {
 			daily->nonlegalHolydayWH = (time_t)0;
 			daily->legalHolydayWH = (time_t)0;
 
+printf("%d\n", __LINE__);
 			if ((day > lastWorkDay) && (daily->weekdayNum < lastWorkWeekday)) temp_weeklyWH = (time_t)0;
+printf("%d\n", __LINE__);
 			lastWorkDay = day;
 			lastWorkWeekday = daily->weekdayNum;
 			daily->dailyWH = (time_t)0;
 			daily->weeklyWH = temp_weeklyWH;
 
 
+printf("%d\n", __LINE__);
 			char *sewt[2], *shm[2], *ehm[2];
+printf("%d\n", __LINE__);
 			for (j=0; j<split_count; j++) {
+printf("%d\n", __LINE__);
 				char *worktime = (char *)malloc(12);
+printf("%d\n", __LINE__);
 				strcpy(worktime, daily->workTime[j]);
+printf("%d\n", __LINE__);
 				split(worktime, "-", sewt);
+printf("%d\n", __LINE__);
 				char *swt = (char *)malloc(6);
 				char *ewt = (char *)malloc(6);
+printf("%d\n", __LINE__);
 				strcpy(swt, sewt[0]);
+printf("%d\n", __LINE__);
 				strcpy(ewt, sewt[1]);
+printf("%d\n", __LINE__);
 				split(swt, ":", shm);
+printf("%d\n", __LINE__);
 				split(ewt, ":", ehm);
+printf("%d\n", __LINE__);
 
 
 				//start time
+printf("%d\n", __LINE__);
 				hour = atoi(shm[0]);
+printf("%d\n", __LINE__);
 				minute = atoi(shm[1]);
+printf("%d\n", __LINE__);
 				dayStride = 0;
 				if (hour > 23) {
 					dayStride = 1;
@@ -491,124 +525,185 @@ int main() {
 				tm_struct.tm_mday = day + dayStride;
 				tm_struct.tm_hour = hour;
 				tm_struct.tm_min = minute;
+printf("%d\n", __LINE__);
 				if ((start_tm = mktime(&tm_struct)) == (time_t)-1)
 					return 0;
 
+printf("%d\n", __LINE__);
 				//end time
 				hour = atoi(ehm[0]);
 				minute = atoi(ehm[1]);
 				dayStride = 0;
+printf("%d\n", __LINE__);
 				if (hour > 23) {
 					dayStride = 1;
 					hour -= 24;
 				}
+printf("%d\n", __LINE__);
 				tm_struct.tm_mday = day + dayStride;
 				tm_struct.tm_hour = hour;
 				tm_struct.tm_min = minute;
+printf("%d\n", __LINE__);
 				if ((end_tm = mktime(&tm_struct)) == (time_t)-1)
 					return 0;
 
 				// 労働時間を計算する
+printf("%d\n", __LINE__);
 				if (strncmp(total->yearMonth, daily->yearMonthDay, 7) != 0) {
 					daily->dailyWH += difftime(end_tm, start_tm);
 					daily->weeklyWH += daily->dailyWH;
 					continue;
 				}
 				// 労働時間数を計算する
+printf("%d\n", __LINE__);
 				if(start_tm < atEight) {
 					// printf("start < atEight, ");
+printf("%d\n", __LINE__);
 					if (end_tm <= atEight) {
 						// printf("end <= atEight\n");//Moring(s-e)
+printf("%d\n", __LINE__);
 						checkMorning(daily, start_tm, end_tm);
 					}
 					else if (end_tm <= atSixTeen) {
 						// printf("atEight < end <= atSixTeen\n");//Morning(s-8)/Daytime(8-e)
+printf("%d\n", __LINE__);
 						checkMorning(daily, start_tm, atEight);
+printf("%d\n", __LINE__);
 						checkDaytime(daily, atEight, end_tm);
+printf("%d\n", __LINE__);
 					}
 					else if (end_tm <= atTwentyTwo) {
 						// printf("atSixTeen < end <= atTwentyTwo \n");//Morning(s-8)/Daytime(8-16)/Night(16-e)
+printf("%d\n", __LINE__);
 						checkMorning(daily, start_tm, atEight);
+printf("%d\n", __LINE__);
 						checkDaytime(daily, atEight, atSixTeen);
+printf("%d\n", __LINE__);
 						checkNight(daily, atSixTeen, end_tm);
+printf("%d\n", __LINE__);
 					}
 					else if (end_tm <= atTwentyFour) {
 						// printf("atTwentyTwo < end \n");//Morning(s-8)/Daytime(8-16)/Night(16-22)/LateNight(22-e)
+printf("%d\n", __LINE__);
 						checkMorning(daily, start_tm, atEight);
+printf("%d\n", __LINE__);
 						checkDaytime(daily, atEight, atSixTeen);
+printf("%d\n", __LINE__);
 						checkNight(daily, atSixTeen, atTwentyTwo);
+printf("%d\n", __LINE__);
 						checkLateNight(daily, atTwentyTwo, end_tm);
+printf("%d\n", __LINE__);
 					}
 					else if (atTwentyFour < end_tm) {
 						// printf("atTwentyFour < end \n");//Morning(s-8)/Daytime(8-16)/Night(16-22)/LateNight(22-24)/Midnight(24-e)
+printf("%d\n", __LINE__);
 						checkMorning(daily, start_tm, atEight);
+printf("%d\n", __LINE__);
 						checkDaytime(daily, atEight, atSixTeen);
+printf("%d\n", __LINE__);
 						checkNight(daily, atSixTeen, atTwentyTwo);
+printf("%d\n", __LINE__);
 						checkLateNight(daily, atTwentyTwo, atTwentyFour);
+printf("%d\n", __LINE__);
 						checkMidnight(daily, atTwentyFour, end_tm);
+printf("%d\n", __LINE__);
 					}
 				}
 				else if (atEight <= start_tm && start_tm < atSixTeen) {
 					// printf("atEight <= start < atSixTeen, ");
+printf("%d\n", __LINE__);
 					if (end_tm <= atSixTeen) {
 						// printf("end <= atSixTeen\n");//Daytime(s-e)
+printf("%d\n", __LINE__);
 						checkDaytime(daily, start_tm, end_tm);
+printf("%d\n", __LINE__);
 					}
 					else if (end_tm <= atTwentyTwo) {
 						// printf("atSixTeen < end <= atTwentyTwo \n");//Daytime(s-16)/Night(16-e)
+printf("%d\n", __LINE__);
 						checkDaytime(daily, start_tm, atSixTeen);
+printf("%d\n", __LINE__);
 						checkNight(daily, atSixTeen, end_tm);
+printf("%d\n", __LINE__);
 					}
 					else if (end_tm <= atTwentyFour) {
 						// printf("atTwentyTwo < end \n");//Daytime(s-16)/Night(16-22)/LateNight(22-e)
+printf("%d\n", __LINE__);
 						checkDaytime(daily, start_tm, atSixTeen);
+printf("%d\n", __LINE__);
 						checkNight(daily, atSixTeen, atTwentyTwo);
+printf("%d\n", __LINE__);
 						checkLateNight(daily, atTwentyTwo, end_tm);
+printf("%d\n", __LINE__);
 					}
 					else if (atTwentyFour < end_tm) {
 						// printf("atTwentyFour < end \n");//Daytime(s-16)/Night(16-22)/LateNight(22-24)/Midnight(24-e)
+printf("%d\n", __LINE__);
 						checkDaytime(daily, start_tm, atSixTeen);
+printf("%d\n", __LINE__);
 						checkNight(daily, atSixTeen, atTwentyTwo);
+printf("%d\n", __LINE__);
 						checkLateNight(daily, atTwentyTwo, atTwentyFour);
+printf("%d\n", __LINE__);
 						checkMidnight(daily, atTwentyFour, end_tm);
+printf("%d\n", __LINE__);
 					}
 				}
 				else if (atSixTeen <= start_tm && start_tm < atTwentyTwo) {
 					// printf("atSixTeen <= start < atTwentyTwo, ");
+printf("%d\n", __LINE__);
 					if (end_tm <= atTwentyTwo) {
 						// printf("end <= atTwentyTwo \n");//Night(s-e)
+printf("%d\n", __LINE__);
 						checkNight(daily, start_tm, end_tm);
+printf("%d\n", __LINE__);
 					}
 					else if (end_tm <= atTwentyFour) {
 						// printf("atTwentyTwo < end \n");//Night(s-22)/LateNight(22-e)
+printf("%d\n", __LINE__);
 						checkNight(daily, start_tm, atTwentyTwo);
+printf("%d\n", __LINE__);
 						checkLateNight(daily, atTwentyTwo, end_tm);
+printf("%d\n", __LINE__);
 					}
 					else if (atTwentyFour < end_tm) {
 						// printf("atTwentyFour < end \n");//Night(s-22)/LateNight(22-24)/Midnight(24-e)
+printf("%d\n", __LINE__);
 						checkNight(daily, start_tm, atTwentyTwo);
+printf("%d\n", __LINE__);
 						checkLateNight(daily, atTwentyTwo, atTwentyFour);
+printf("%d\n", __LINE__);
 						checkMidnight(daily, atTwentyFour, end_tm);
+printf("%d\n", __LINE__);
 					}
 				}
 				else if (atTwentyTwo <= start_tm && start_tm < atTwentyFour) {
 					// printf("atTwentyTwo <= start_tm < atTwentyFour, ");
+printf("%d\n", __LINE__);
 					if (end_tm <= atTwentyFour) {
 						// printf("atTwentyTwo < end <= atTwentyFour\n");//LateNight(s-e)
+printf("%d\n", __LINE__);
 						checkLateNight(daily, start_tm, end_tm);
+printf("%d\n", __LINE__);
 					}
 					else if (atTwentyFour < end_tm) {
 						// printf("atTwentyFour < end \n");//LateNight(s-24)/Midnight(24-e)
+printf("%d\n", __LINE__);
 						checkLateNight(daily, start_tm, atTwentyFour);
+printf("%d\n", __LINE__);
 						checkMidnight(daily, atTwentyFour, end_tm);
+printf("%d\n", __LINE__);
 					}
 				}
 				else if (atTwentyFour <= start_tm) {
 					// printf("atTwentyFour < start\n");//Midnight(s-e)
+printf("%d\n", __LINE__);
 					checkMidnight(daily, start_tm, end_tm);
+printf("%d\n", __LINE__);
 				}
 			}
 
+printf("%d\n", __LINE__);
 			total->nomalWH += daily->nomalWH;
 			total->fixedOWH += daily->fixedOWH;
 			total->legalOWH += daily->legalOWH;
@@ -616,19 +711,24 @@ int main() {
 			total->nonlegalHolydayWH += daily->nonlegalHolydayWH;
 			total->legalHolydayWH += daily->legalHolydayWH;
 
+printf("%d\n", __LINE__);
 			temp_weeklyWH = daily->weeklyWH;
 
+printf("%d\n", __LINE__);
 			free(daily);
+printf("%d\n", __LINE__);
 		}
 		i++;
 	}
 
 	// printf("%d\n", roundTimeToHour(total->nomalWH));
+printf("%d\n", __LINE__);
 	printf("%d\n", roundTimeToHour(total->fixedOWH));
 	printf("%d\n", roundTimeToHour(total->legalOWH));
 	printf("%d\n", roundTimeToHour(total->midnightOWH));
 	printf("%d\n", roundTimeToHour(total->nonlegalHolydayWH));
 	printf("%d\n", roundTimeToHour(total->legalHolydayWH));
+printf("%d\n", __LINE__);
 
 	return 0;
 }
