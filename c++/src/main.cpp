@@ -51,12 +51,19 @@ int main() {
 		i++;
 	}
 
-	// Log("DEBUG", "%d\n", "所定労働", roundSecToHour(total->nomalWH));
-	Log("DEBUG", "%d\n", roundSecToHour(total->fixedOWH));
-	Log("DEBUG", "%d\n", roundSecToHour(total->legalOWH));
-	Log("DEBUG", "%d\n", roundSecToHour(total->midnightOWH));
-	Log("DEBUG", "%d\n", roundSecToHour(total->nonlegalHolydayWH));
-	Log("DEBUG", "%d\n", roundSecToHour(total->legalHolydayWH));
+	char *msg; 
+	// sprintf("%d\n", roundSecToHour(total->nomalWH));
+	// Log("DEBUG", msg);
+	sprintf("%d\n", roundSecToHour(total->fixedOWH));
+	Log("DEBUG", msg);
+	sprintf("%d\n", roundSecToHour(total->legalOWH));
+	Log("DEBUG", msg);
+	sprintf("%d\n", roundSecToHour(total->midnightOWH));
+	Log("DEBUG", msg);
+	sprintf("%d\n", roundSecToHour(total->nonlegalHolydayWH));
+	Log("DEBUG", msg);
+	sprintf("%d\n", roundSecToHour(total->legalHolydayWH));
+	Log("DEBUG", msg);
 
 	return 0;
 }
