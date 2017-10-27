@@ -10,7 +10,7 @@ int main() {
 	//Target Year-Month
 	int ym = scanf("%7s", in_ym);
 	flush();
-	char *msg; sprintf("%s\n", ym);
+	char *msg; sprintf(msg, "%s\n", ym);
 	Log("DEBUG", msg);
 	if (initTotalWorkHoursStruct(in_ym, total)) return 0;
 
@@ -54,15 +54,15 @@ int main() {
 	char *msg; 
 	// sprintf("%d\n", roundSecToHour(total->nomalWH));
 	// Log("DEBUG", msg);
-	sprintf("%d\n", roundSecToHour(total->fixedOWH));
+	sprintf(msg, "%d\n", roundSecToHour(total->fixedOWH));
 	Log("DEBUG", msg);
-	sprintf("%d\n", roundSecToHour(total->legalOWH));
+	sprintf(msg, "%d\n", roundSecToHour(total->legalOWH));
 	Log("DEBUG", msg);
-	sprintf("%d\n", roundSecToHour(total->midnightOWH));
+	sprintf(msg, "%d\n", roundSecToHour(total->midnightOWH));
 	Log("DEBUG", msg);
-	sprintf("%d\n", roundSecToHour(total->nonlegalHolydayWH));
+	sprintf(msg, "%d\n", roundSecToHour(total->nonlegalHolydayWH));
 	Log("DEBUG", msg);
-	sprintf("%d\n", roundSecToHour(total->legalHolydayWH));
+	sprintf(msg, "%d\n", roundSecToHour(total->legalHolydayWH));
 	Log("DEBUG", msg);
 
 	return 0;
