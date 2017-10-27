@@ -10,7 +10,7 @@ int main() {
 	//Target Year-Month
 	int ym = scanf("%7s", in_ym);
 	flush();
-	char *msg; sprintf(msg, "%s\n", ym);
+	char *msg; sprintf(msg, "%s\n", in_ym);
 	Log("DEBUG", msg);
 	if (initTotalWorkHoursStruct(in_ym, total)) return 0;
 
@@ -51,7 +51,6 @@ int main() {
 		i++;
 	}
 
-	char *msg; 
 	// sprintf("%d\n", roundSecToHour(total->nomalWH));
 	// Log("DEBUG", msg);
 	sprintf(msg, "%d\n", roundSecToHour(total->fixedOWH));
