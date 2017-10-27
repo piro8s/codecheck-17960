@@ -15,4 +15,4 @@ ROOT=$(cd $(dirname $0) && pwd)
 # node $ROOT/nodejs/src/main.js "$@"
 
 ### C++ ###
- $ROOT/c++/app.o "$@"
+# $ROOT/c++/app.o "$@"

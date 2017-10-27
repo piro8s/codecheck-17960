@@ -15,5 +15,5 @@ ROOT=$(cd $(dirname $0) && pwd)
 # python -m compileall .
 
 ### C++ ###
- cd $ROOT/c++
- c++ -o app.o src/*.cpp
+# cd $ROOT/c++
+# c++ -o app.o src/*.cpp
