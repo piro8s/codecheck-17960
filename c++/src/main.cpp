@@ -10,7 +10,8 @@ int main() {
 	//Target Year-Month
 	int ym = scanf("%7s", in_ym);
 	flush();
-	Log("DEBUG", "%s\n", ym);
+	char *msg; sprintf("%s\n", ym);
+	Log("DEBUG", msg);
 	if (initTotalWorkHoursStruct(in_ym, total)) return 0;
 
 	while(1) {
