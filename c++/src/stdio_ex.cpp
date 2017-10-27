@@ -8,6 +8,6 @@ void flush() {
 	}
 }
 
-int log(const char *tag, const char *str) {
+int Log(const char *tag, const char *str) {
 	return printf("%s(%d):%s:[%s] %s\n", __FILE__, __LINE__, tag, __func__, str);
 }

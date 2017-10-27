@@ -344,31 +344,31 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 		}
 		// 労働時間数を計算する
 		if(start_tm < atOpeningTime) {
-			log("DEBUG", "start < atOpeningTime, ");
+			Log("DEBUG", "start < atOpeningTime, ");
 			if (end_tm <= atOpeningTime) {
-				log("DEBUG", "end <= atOpeningTime\n");//Moring(s-e)
+				Log("DEBUG", "end <= atOpeningTime\n");//Moring(s-e)
 				checkMorning(daily, start_tm, end_tm);
 			}
 			else if (end_tm <= atClosingTime) {
-				log("DEBUG", "atOpeningTime < end <= atClosingTime\n");//Morning(s-8)/Daytime(8-e)
+				Log("DEBUG", "atOpeningTime < end <= atClosingTime\n");//Morning(s-8)/Daytime(8-e)
 				checkMorning(daily, start_tm, atOpeningTime);
 				checkDaytime(daily, atOpeningTime, end_tm);
 			}
 			else if (end_tm <= atBeginningOfLateNight) {
-				log("DEBUG", "atClosingTime < end <= atBeginningOfLateNight \n");//Morning(s-8)/Daytime(8-16)/Night(16-e)
+				Log("DEBUG", "atClosingTime < end <= atBeginningOfLateNight \n");//Morning(s-8)/Daytime(8-16)/Night(16-e)
 				checkMorning(daily, start_tm, atOpeningTime);
 				checkDaytime(daily, atOpeningTime, atClosingTime);
 				checkNight(daily, atClosingTime, end_tm);
 			}
 			else if (end_tm <= atChangeOfDate) {
-				log("DEBUG", "atBeginningOfLateNight < end \n");//Morning(s-8)/Daytime(8-16)/Night(16-22)/LateNight(22-e)
+				Log("DEBUG", "atBeginningOfLateNight < end \n");//Morning(s-8)/Daytime(8-16)/Night(16-22)/LateNight(22-e)
 				checkMorning(daily, start_tm, atOpeningTime);
 				checkDaytime(daily, atOpeningTime, atClosingTime);
 				checkNight(daily, atClosingTime, atBeginningOfLateNight);
 				checkLateNight(daily, atBeginningOfLateNight, end_tm);
 			}
 			else if (atChangeOfDate < end_tm) {
-				log("DEBUG", "atChangeOfDate < end \n");//Morning(s-8)/Daytime(8-16)/Night(16-22)/LateNight(22-24)/Midnight(24-e)
+				Log("DEBUG", "atChangeOfDate < end \n");//Morning(s-8)/Daytime(8-16)/Night(16-22)/LateNight(22-24)/Midnight(24-e)
 				checkMorning(daily, start_tm, atOpeningTime);
 				checkDaytime(daily, atOpeningTime, atClosingTime);
 				checkNight(daily, atClosingTime, atBeginningOfLateNight);
@@ -377,24 +377,24 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 			}
 		}
 		else if (atOpeningTime <= start_tm && start_tm < atClosingTime) {
-			log("DEBUG", "atOpeningTime <= start < atClosingTime, ");
+			Log("DEBUG", "atOpeningTime <= start < atClosingTime, ");
 			if (end_tm <= atClosingTime) {
-				log("DEBUG", "end <= atClosingTime\n");//Daytime(s-e)
+				Log("DEBUG", "end <= atClosingTime\n");//Daytime(s-e)
 				checkDaytime(daily, start_tm, end_tm);
 			}
 			else if (end_tm <= atBeginningOfLateNight) {
-				log("DEBUG", "atClosingTime < end <= atBeginningOfLateNight \n");//Daytime(s-16)/Night(16-e)
+				Log("DEBUG", "atClosingTime < end <= atBeginningOfLateNight \n");//Daytime(s-16)/Night(16-e)
 				checkDaytime(daily, start_tm, atClosingTime);
 				checkNight(daily, atClosingTime, end_tm);
 			}
 			else if (end_tm <= atChangeOfDate) {
-				log("DEBUG", "atBeginningOfLateNight < end \n");//Daytime(s-16)/Night(16-22)/LateNight(22-e)
+				Log("DEBUG", "atBeginningOfLateNight < end \n");//Daytime(s-16)/Night(16-22)/LateNight(22-e)
 				checkDaytime(daily, start_tm, atClosingTime);
 				checkNight(daily, atClosingTime, atBeginningOfLateNight);
 				checkLateNight(daily, atBeginningOfLateNight, end_tm);
 			}
 			else if (atChangeOfDate < end_tm) {
-				log("DEBUG", "atChangeOfDate < end \n");//Daytime(s-16)/Night(16-22)/LateNight(22-24)/Midnight(24-e)
+				Log("DEBUG", "atChangeOfDate < end \n");//Daytime(s-16)/Night(16-22)/LateNight(22-24)/Midnight(24-e)
 				checkDaytime(daily, start_tm, atClosingTime);
 				checkNight(daily, atClosingTime, atBeginningOfLateNight);
 				checkLateNight(daily, atBeginningOfLateNight, atChangeOfDate);
@@ -402,37 +402,37 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 			}
 		}
 		else if (atClosingTime <= start_tm && start_tm < atBeginningOfLateNight) {
-			log("DEBUG", "atClosingTime <= start < atBeginningOfLateNight, ");
+			Log("DEBUG", "atClosingTime <= start < atBeginningOfLateNight, ");
 			if (end_tm <= atBeginningOfLateNight) {
-				log("DEBUG", "end <= atBeginningOfLateNight \n");//Night(s-e)
+				Log("DEBUG", "end <= atBeginningOfLateNight \n");//Night(s-e)
 				checkNight(daily, start_tm, end_tm);
 			}
 			else if (end_tm <= atChangeOfDate) {
-				log("DEBUG", "atBeginningOfLateNight < end \n");//Night(s-22)/LateNight(22-e)
+				Log("DEBUG", "atBeginningOfLateNight < end \n");//Night(s-22)/LateNight(22-e)
 				checkNight(daily, start_tm, atBeginningOfLateNight);
 				checkLateNight(daily, atBeginningOfLateNight, end_tm);
 			}
 			else if (atChangeOfDate < end_tm) {
-				log("DEBUG", "atChangeOfDate < end \n");//Night(s-22)/LateNight(22-24)/Midnight(24-e)
+				Log("DEBUG", "atChangeOfDate < end \n");//Night(s-22)/LateNight(22-24)/Midnight(24-e)
 				checkNight(daily, start_tm, atBeginningOfLateNight);
 				checkLateNight(daily, atBeginningOfLateNight, atChangeOfDate);
 				checkMidnight(daily, atChangeOfDate, end_tm);
 			}
 		}
 		else if (atBeginningOfLateNight <= start_tm && start_tm < atChangeOfDate) {
-			log("DEBUG", "atBeginningOfLateNight <= start_tm < atChangeOfDate, ");
+			Log("DEBUG", "atBeginningOfLateNight <= start_tm < atChangeOfDate, ");
 			if (end_tm <= atChangeOfDate) {
-				log("DEBUG", "atBeginningOfLateNight < end <= atChangeOfDate\n");//LateNight(s-e)
+				Log("DEBUG", "atBeginningOfLateNight < end <= atChangeOfDate\n");//LateNight(s-e)
 				checkLateNight(daily, start_tm, end_tm);
 			}
 			else if (atChangeOfDate < end_tm) {
-				log("DEBUG", "atChangeOfDate < end \n");//LateNight(s-24)/Midnight(24-e)
+				Log("DEBUG", "atChangeOfDate < end \n");//LateNight(s-24)/Midnight(24-e)
 				checkLateNight(daily, start_tm, atChangeOfDate);
 				checkMidnight(daily, atChangeOfDate, end_tm);
 			}
 		}
 		else if (atChangeOfDate <= start_tm) {
-			log("DEBUG", "atChangeOfDate < start\n");//Midnight(s-e)
+			Log("DEBUG", "atChangeOfDate < start\n");//Midnight(s-e)
 			checkMidnight(daily, start_tm, end_tm);
 		}
 		free(period);

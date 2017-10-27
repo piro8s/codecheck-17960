@@ -10,7 +10,7 @@ int main() {
 	//Target Year-Month
 	int ym = scanf("%7s", in_ym);
 	flush();
-	log("DEBUG", "%s\n", ym);
+	Log("DEBUG", "%s\n", ym);
 	if (initTotalWorkHoursStruct(in_ym, total)) return 0;
 
 	while(1) {
@@ -50,12 +50,12 @@ int main() {
 		i++;
 	}
 
-	// log("DEBUG", "%d\n", "所定労働", roundTimeToHour(total->nomalWH));
-	log("DEBUG", "%d\n", roundTimeToHour(total->fixedOWH));
-	log("DEBUG", "%d\n", roundTimeToHour(total->legalOWH));
-	log("DEBUG", "%d\n", roundTimeToHour(total->midnightOWH));
-	log("DEBUG", "%d\n", roundTimeToHour(total->nonlegalHolydayWH));
-	log("DEBUG", "%d\n", roundTimeToHour(total->legalHolydayWH));
+	// Log("DEBUG", "%d\n", "所定労働", roundSecToHour(total->nomalWH));
+	Log("DEBUG", "%d\n", roundSecToHour(total->fixedOWH));
+	Log("DEBUG", "%d\n", roundSecToHour(total->legalOWH));
+	Log("DEBUG", "%d\n", roundSecToHour(total->midnightOWH));
+	Log("DEBUG", "%d\n", roundSecToHour(total->nonlegalHolydayWH));
+	Log("DEBUG", "%d\n", roundSecToHour(total->legalHolydayWH));
 
 	return 0;
 }
