@@ -71,7 +71,7 @@ void flush() {
 }
 
 /**
- * Delete '\n' from string.
+ * delch '\n' from string.
  * @param char *	str		The target string.
  */
 void lntrim(char *str) {

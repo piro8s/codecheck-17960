@@ -1,10 +1,10 @@
 #include "working.h"
 
 int splitCount;
-time_t static atOpeningTime;
-time_t static atClosingTime;
-time_t static atLateNightTime;
-time_t static atMidnightTime;
+time_t atOpeningTime;
+time_t atClosingTime;
+time_t atLateNightTime;
+time_t atMidnightTime;
 
 void setOpeningTime(const time_t zero, const time_t open) {
 	atOpeningTime = zero + open;
@@ -41,12 +41,12 @@ int getSplitCount(void) {
 	return splitCount;
 }
 
-int setBeggingOfday(DailyWorkHours *wh, const char *strYMD) {
+int setBeggingOfday(DailyWorkHours *daily, const char *strYMD) {
 	struct tm tm_struct;
 	char *ymd[3], ymd_temp[strlen(strYMD)+1];
 
 	strcpy(ymd_temp, strYMD);
-	split(ymd_temp, "/", ymd);
+	split(ymd_temp, '/', ymd);
 
 	tm_struct.tm_year = atoi(ymd[0]) - 1900;
 	tm_struct.tm_mon = atoi(ymd[1]) - 1;
@@ -54,20 +54,20 @@ int setBeggingOfday(DailyWorkHours *wh, const char *strYMD) {
 	tm_struct.tm_hour = 0;
 	tm_struct.tm_min = 0;
 
-	if ((wh->today = mktime(&tm_struct)) == (time_t)-1)
+	if ((daily->today = mktime(&tm_struct)) == (time_t)-1)
 		return ERROR;
 	return SUCCESS;
 }
-time_t getBeggingOfday(DailyWorkHours *wh) {
-	return wh->today;
+time_t getBeggingOfday(DailyWorkHours *daily) {
+	return daily->today;
 }
 
-int getWorkingDate(DailyWorkHours *wh) {
-	return getDate(wh->today);
+int getWorkingDate(DailyWorkHours *daily) {
+	return getDate(daily->today);
 }
 
-int getWorkingWeekdayNum(DailyWorkHours *wh) {
-	return wh->weekdayNum;
+int getWorkingWeekdayNum(DailyWorkHours *daily) {
+	return daily->weekdayNum;
 }
 
 int isEnd(char *input) {
@@ -80,192 +80,192 @@ int isError(char *input) {
 	return SUCCESS;
 }
 
-int checkWorkDaily(DailyWorkHours *wh, int lastWorkDay, int lastWorkWeekday) {
-	if ((getWorkingDate(wh) > lastWorkDay) && (getWorkingWeekdayNum(wh) < lastWorkWeekday)) return FAIL;
+int checkWorkDaily(DailyWorkHours *daily, int lastWorkDay, int lastWorkWeekday) {
+	if ((getWorkingDate(daily) > lastWorkDay) && (getWorkingWeekdayNum(daily) < lastWorkWeekday)) return FAIL;
 	return SUCCESS;
 }
 
-void addWorkingHours(DailyWorkHours *wh, time_t workinghours) {
-	wh->dailyWH += workinghours;
-	wh->weeklyWH += workinghours;
+void addWorkingHours(DailyWorkHours *daily, time_t workinghours) {
+	daily->dailyWH += workinghours;
+	daily->weeklyWH += workinghours;
 }
 
-time_t checkOvertimeWorking(DailyWorkHours *wh, time_t diff) {
+time_t checkOvertimeWorking(DailyWorkHours *daily, time_t diff) {
 	time_t overtime = (time_t)0;
 
 	//Already work overtime
-	if (wh->dailyWH > DAIRY_LEGAL_WORKING_HOUR_SEC || wh->weeklyWH > WEEKLY_LEGAL_WORKING_HOUR_SEC) {
+	if (daily->dailyWH > DAIRY_LEGAL_WORKING_HOUR_SEC || daily->weeklyWH > WEEKLY_LEGAL_WORKING_HOUR_SEC) {
 		overtime = diff;
 	}
 	//Work overtime on this period. 
-	else if ((wh->dailyWH+diff) > DAIRY_LEGAL_WORKING_HOUR_SEC || (wh->weeklyWH+diff) > WEEKLY_LEGAL_WORKING_HOUR_SEC) {
-		overtime = (wh->dailyWH + diff - DAIRY_LEGAL_WORKING_HOUR_SEC) < (wh->weeklyWH + diff - WEEKLY_LEGAL_WORKING_HOUR_SEC) ? (wh->weeklyWH + diff - WEEKLY_LEGAL_WORKING_HOUR_SEC) : (wh->dailyWH + diff - DAIRY_LEGAL_WORKING_HOUR_SEC);
+	else if ((daily->dailyWH+diff) > DAIRY_LEGAL_WORKING_HOUR_SEC || (daily->weeklyWH+diff) > WEEKLY_LEGAL_WORKING_HOUR_SEC) {
+		overtime = (daily->dailyWH + diff - DAIRY_LEGAL_WORKING_HOUR_SEC) < (daily->weeklyWH + diff - WEEKLY_LEGAL_WORKING_HOUR_SEC) ? (daily->weeklyWH + diff - WEEKLY_LEGAL_WORKING_HOUR_SEC) : (daily->dailyWH + diff - DAIRY_LEGAL_WORKING_HOUR_SEC);
 	}
 
 	return overtime;
 }
 
 //5-8{法定内/法定外}/{所定休日/法定休日}
-void checkMorning(DailyWorkHours *wh, time_t s, time_t e) {
-	int wd = wh->weekdayNum;
+void checkMorning(DailyWorkHours *daily, time_t s, time_t e) {
+	int wd = daily->weekdayNum;
 	time_t diff = difftime(e, s);
 	time_t overtime;
 
 	switch(wd) {
 		case 0:
-			wh->legalHolydayWH += diff;
+			daily->legalHolydayWH += diff;
 			break;
 		case 1:
 		case 2:
 		case 3:
 		case 4:
 		case 5:
-			overtime = checkOvertimeWorking(wh, diff);
-			wh->fixedOWH += diff - overtime;
-			wh->legalOWH += overtime;
+			overtime = checkOvertimeWorking(daily, diff);
+			daily->fixedOWH += diff - overtime;
+			daily->legalOWH += overtime;
 			break;
 		case 6:
-			wh->nonlegalHolydayWH += diff;
+			daily->nonlegalHolydayWH += diff;
 			break;
 	}
-	addWorkingHours(wh, diff);
+	addWorkingHours(daily, diff);
 }
 
 //8-16{所定/法定外}/{所定休日/法定休日}
-void checkDaytime(DailyWorkHours *wh, time_t s, time_t e) {
-	int wd = wh->weekdayNum;
+void checkDaytime(DailyWorkHours *daily, time_t s, time_t e) {
+	int wd = daily->weekdayNum;
 	time_t diff = difftime(e, s);
 	time_t overtime;
 
 	switch(wd) {
 		case 0:
-			wh->legalHolydayWH += diff;
+			daily->legalHolydayWH += diff;
 			break;
 		case 1:
 		case 2:
 		case 3:
 		case 4:
 		case 5:
-			overtime = checkOvertimeWorking(wh, diff);
-			wh->nomalWH += diff - overtime;
-			wh->legalOWH += overtime;
+			overtime = checkOvertimeWorking(daily, diff);
+			daily->nomalWH += diff - overtime;
+			daily->legalOWH += overtime;
 			break;
 		case 6:
-			wh->nonlegalHolydayWH += diff;
+			daily->nonlegalHolydayWH += diff;
 			break;
 	}
-	addWorkingHours(wh, diff);
+	addWorkingHours(daily, diff);
 }
 
 
 //17-22{法定内/法定外}/{所定休日/法定休日}
-void checkNight(DailyWorkHours *wh, time_t s, time_t e) {
-	int wd = wh->weekdayNum;
+void checkNight(DailyWorkHours *daily, time_t s, time_t e) {
+	int wd = daily->weekdayNum;
 	time_t diff = difftime(e, s);
 	time_t overtime;
 
 	switch(wd) {
 		case 0:
-			wh->legalHolydayWH += diff;
+			daily->legalHolydayWH += diff;
 			break;
 		case 1:
 		case 2:
 		case 3:
 		case 4:
 		case 5:
-			overtime = checkOvertimeWorking(wh, diff);
-			wh->fixedOWH += diff - overtime;
-			wh->legalOWH += overtime;
+			overtime = checkOvertimeWorking(daily, diff);
+			daily->fixedOWH += diff - overtime;
+			daily->legalOWH += overtime;
 			break;
 		case 6:
-			wh->nonlegalHolydayWH += diff;
+			daily->nonlegalHolydayWH += diff;
 			break;
 	}
-	addWorkingHours(wh, diff);
+	addWorkingHours(daily, diff);
 }
 
 //22-24{法定内/法定外}/{所定休日/法定休日} +{深夜}
-void checkLateNight(DailyWorkHours *wh, time_t s, time_t e) {
-	int wd = wh->weekdayNum;
+void checkLateNight(DailyWorkHours *daily, time_t s, time_t e) {
+	int wd = daily->weekdayNum;
 	time_t diff = difftime(e, s);
 	time_t overtime;
 
-	wh->midnightOWH += diff;
+	daily->midnightOWH += diff;
 	switch(wd) {
 		case 0:
-			wh->legalHolydayWH += diff;
+			daily->legalHolydayWH += diff;
 			break;
 		case 1:
 		case 2:
 		case 3:
 		case 4:
 		case 5:
-			overtime = checkOvertimeWorking(wh, diff);
-			wh->fixedOWH += diff - overtime;
-			wh->legalOWH += overtime;
+			overtime = checkOvertimeWorking(daily, diff);
+			daily->fixedOWH += diff - overtime;
+			daily->legalOWH += overtime;
 			break;
 		case 6:
-			wh->nonlegalHolydayWH += diff;
+			daily->nonlegalHolydayWH += diff;
 			break;
 	}
-	addWorkingHours(wh, diff);
+	addWorkingHours(daily, diff);
 }
 
 //24-29<<翌日判定>>{法定内/法定外}/{所定休日/法定休日} +{深夜}
-void checkMidnight(DailyWorkHours *wh, time_t s, time_t e) {
-	int wd = wh->tmorrowWeekdayNum;
+void checkMidnight(DailyWorkHours *daily, time_t s, time_t e) {
+	int wd = daily->tmorrowWeekdayNum;
 	time_t diff = difftime(e, s);
 	time_t overtime;
 
-	wh->midnightOWH += diff;
+	daily->midnightOWH += diff;
 	switch(wd) {
 		case 0:
-			wh->legalHolydayWH += diff;
+			daily->legalHolydayWH += diff;
 			break;
 		case 1:
 		case 2:
 		case 3:
 		case 4:
 		case 5:
-			overtime = checkOvertimeWorking(wh, diff);
-			wh->fixedOWH += diff - overtime;
-			wh->legalOWH += overtime;
+			overtime = checkOvertimeWorking(daily, diff);
+			daily->fixedOWH += diff - overtime;
+			daily->legalOWH += overtime;
 			break;
 		case 6:
-			wh->nonlegalHolydayWH += diff;
+			daily->nonlegalHolydayWH += diff;
 			break;
 	}
-	addWorkingHours(wh, diff);
+	addWorkingHours(daily, diff);
 }
 
-int initTotalWorkHours(char *in, TotalWorkHours *wh) {
+int initTotalWorkHours(char *in, TotalWorkHours *total) {
 	if (isEnd(in)==END || isError(in)==ERROR) return END;
 	char *del;
-	del = (char *)malloc((strlen(in)-search(in, '/')), sizeof(char));
-	if (delete(in, '/', del) == 0) return ERROR;
+	del = (char *)malloc((strlen(in)-searchc(in, '/'))*sizeof(char));
+	if (delch(in, '/', del) == 0) return ERROR;
 
-	wh->yearMonth = atoi(del);
-	wh->fixedOWH = (time_t)0;
-	wh->legalOWH = (time_t)0;
-	wh->midnightOWH = (time_t)0;
-	wh->nonlegalHolydayWH = (time_t)0;
-	wh->legalHolydayWH = (time_t)0;
+	total->yearMonth = atoi(del);
+	total->fixedOWH = (time_t)0;
+	total->legalOWH = (time_t)0;
+	total->midnightOWH = (time_t)0;
+	total->nonlegalHolydayWH = (time_t)0;
+	total->legalHolydayWH = (time_t)0;
 
 	free(del);
 	return SUCCESS;
 }
 
-int initDailyWorkHours(char *in, DailyWorkHours *wh) {
+int initDailyWorkHours(char *in, DailyWorkHours *daily) {
 	char *splited[MAX_BREAK_TIMES+3];
 	int i;
 
 	if (isEnd(in)==END) return END;
 	else if (isError(in)==ERROR) return ERROR;
 
-	split_count = split(in, " ", splited);
+	split_count = split(in, ' ', splited);
 	if (split_count < 1) return 2;
 	for (i=0; i<split_count; i++) {
-		wh->workPeriod[i] = splited[i+1];
+		daily->workPeriod[i] = splited[i+1];
 	}
 
 	if (setBeggingOfday(daily, splited[0]) == ERROR) return ERROR;
@@ -274,17 +274,17 @@ int initDailyWorkHours(char *in, DailyWorkHours *wh) {
 	setLateNightTime(getBeggingOfday(daily), TWENTY_TWO_HOUR_SEC);
 	setMidnightTime(getBeggingOfday(daily), TWENTY_FOUR_HOUR_SEC);
 
-	wh->weekdayNum = subZeller(getBeggingOfday(daily));
-	wh->tmorrowWeekdayNum = subZeller(getBeggingOfday(daily) + ONE_DAY);
+	daily->weekdayNum = subZeller(getBeggingOfday(daily));
+	daily->tmorrowWeekdayNum = subZeller(getBeggingOfday(daily) + ONE_DAY_SEC);
 
-	wh->nomalWH = (time_t)0;
-	wh->fixedOWH = (time_t)0;
-	wh->legalOWH = (time_t)0;
-	wh->midnightOWH = (time_t)0;
-	wh->nonlegalHolydayWH = (time_t)0;
-	wh->legalHolydayWH = (time_t)0;
-	wh->dailyWH = (time_t)0;
-	wh->weeklyWH = (time_t)0;
+	daily->nomalWH = (time_t)0;
+	daily->fixedOWH = (time_t)0;
+	daily->legalOWH = (time_t)0;
+	daily->midnightOWH = (time_t)0;
+	daily->nonlegalHolydayWH = (time_t)0;
+	daily->legalHolydayWH = (time_t)0;
+	daily->dailyWH = (time_t)0;
+	daily->weeklyWH = (time_t)0;
 
 	return SUCCESS;
 }
@@ -298,15 +298,15 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 	int j;
 	for (j=0; j<split_count; j++) {
 		// 時刻を Time型 に変換する
-		char *period = (char *)malloc(12);
+		char *period = (char *)malloc(12*sizeof(char));
 		strcpy(period, daily->workPeriod[j]);
-		split(period, "-", sewt);
-		char *start = (char *)malloc(6);
-		char *end = (char *)malloc(6);
+		split(period, '-', sewt);
+		char *start = (char *)malloc(6*sizeof(char));
+		char *end = (char *)malloc(6*sizeof(char));
 		strcpy(start, sewt[0]);
 		strcpy(end, sewt[1]);
-		split(start, ":", shm);
-		split(end, ":", ehm);
+		split(start, ':', shm);
+		split(end, ':', ehm);
 
 		//start time
 		hour = atoi(shm[0]);
@@ -316,7 +316,7 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 			dayStride = 1;
 			hour -= 24;
 		}
-		tm_struct.tm_mday = day + dayStride;
+		tm_struct.tm_mday += dayStride;
 		tm_struct.tm_hour = hour;
 		tm_struct.tm_min = minute;
 		if ((start_tm = mktime(&tm_struct)) == (time_t)-1)
@@ -330,7 +330,7 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 			dayStride = 1;
 			hour -= 24;
 		}
-		tm_struct.tm_mday = day + dayStride;
+		tm_struct.tm_mday += dayStride;
 		tm_struct.tm_hour = hour;
 		tm_struct.tm_min = minute;
 		if ((end_tm = mktime(&tm_struct)) == (time_t)-1)

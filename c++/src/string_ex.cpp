@@ -11,40 +11,43 @@ void lntrim(char *str) {
 	}
 }
 
-int search(const char *str, const char *c){
+int searchc(char *str, char c){
 	int i, cnt = 0;
 
 	for(i=0; i<strlen(str); i++){
-		if(str[i] == *c) cnt++;
+		if(str[i] == c) cnt++;
 	}
 	return cnt;
 }
 
-int split(const char *str, const char *c, char *outlist[] ) {
+int split(char *str, char c, char *outlist[] ) {
 	char *tk;
-	int cnt = search(str, c);
+	int cnt = searchc(str, c);
 	int i;
 
 	if (cnt < 1) return cnt;
-	tk = strtok(str, c);
-	outlist[0] = tk;
+	// tk = strtok(str, &c);
+	// outlist[0] = tk;
+	strcpy(outlist[0], strtok(str, &c));
+;
 	for (i=1; i<cnt+1; i++) {
-		tk = strtok(NULL, c);
-		outlist[i] = tk;
+		// tk = strtok(NULL, &c);
+		// outlist[i] = tk;
+		strcpy(outlist[i], strtok(NULL, &c));
 	}
 
 	return cnt;
 }
 
-int delete(const char *str, const char *c, char *out) {
+int delch(char *str, char c, char *out) {
 	int i, j;
 
 	for (i=0,j=0; i<strlen(str); i++) {
-		if (str[i] == *c) {
+		if (str[i] == c) {
 			j++;
 			continue;
 		}
-		new[i-j] = str[i];
+		out[i-j] = str[i];
 	}
 	return j;
 }

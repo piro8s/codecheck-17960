@@ -1,9 +1,9 @@
-#include<bits/stdc++.h>
+#include<c++/4.2.1/bits/stdc++.h>
 #include "working.h"
 
 int main() {
-	char *in_ym = (char *)malloc(TARGET_YEAR_MONTH_CHR_LEN+1);
-	char *in_wh = (char *)malloc(WORKING_HOUR_PERIOD_CHR_LEN+1);
+	char *in_ym = (char *)malloc((TARGET_YEAR_MONTH_CHR_LEN+1)*sizeof(char));
+	char *in_wh = (char *)malloc((WORKING_HOUR_PERIOD_CHR_LEN+1)*sizeof(char));
 	TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
 	int i=0, j=0;
 

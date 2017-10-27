@@ -101,12 +101,6 @@ int checkWorkDaily(DailyWorkHours *, int, int);
 void addWorkingHours(DailyWorkHours *, time_t workinghours);
 
 /**
- * Get how many times which target row string is splited with white space.
- * @return int 		The split count.
- */
-int splitCount();
-
-/**
  * Get the target date.
  * @return int		The target date.
  */
@@ -117,14 +111,14 @@ int targetDate();
  * @param WorkHours *	wh		The working hours structure.
  * @return time_t		The working hours[sec] of WorkHours.
  */
-time_t weeklyWHOf(WorkHours *);
+time_t weeklyWHOf(DailyWorkHours *);
 
 /**
  * Return the weekday number of WorkHours.
  * @param WorkHours *	wh		The working hours structure.
  * @return int		The weekday number of WorkHours.
  */
-int weekdayNumOf(WorkHours *);
+int weekdayNumOf(DailyWorkHours *);
 
 /**
  * Check the input string means that it is end.
@@ -147,7 +141,7 @@ int isError(char *);
  * @param time_t		diff	The diff time[sec] to be added to working hours.
  * @return time_t		The time[sec] how many hours work overtime.
  */
-time_t checkOvertimeWorking(WorkHours *, time_t);
+time_t checkOvertimeWorking(DailyWorkHours *, time_t);
 
 /**
  * Culculate how many hours work at 5:00 to 8:00.
@@ -155,7 +149,7 @@ time_t checkOvertimeWorking(WorkHours *, time_t);
  * @param time_t		s		The time of start[sec] to work.
  * @param time_t		e		The time of end[sec] to work.
  */
-void checkMorning(WorkHours *, time_t, time_t);
+void checkMorning(DailyWorkHours *, time_t, time_t);
 
 /**
  * Culculate how many hours work at 8:00 to 16:00.
@@ -163,7 +157,7 @@ void checkMorning(WorkHours *, time_t, time_t);
  * @param time_t		s		The time of start[sec] to work.
  * @param time_t		e		The time of end[sec] to work.
  */
-void checkDaytime(WorkHours *, time_t, time_t);
+void checkDaytime(DailyWorkHours *, time_t, time_t);
 
 /**
  * Culculate how many hours work at 16:00 to 22:00.
@@ -171,7 +165,7 @@ void checkDaytime(WorkHours *, time_t, time_t);
  * @param time_t		s		The time of start[sec] to work.
  * @param time_t		e		The time of end[sec] to work.
  */
-void checkNight(WorkHours *, time_t, time_t);
+void checkNight(DailyWorkHours *, time_t, time_t);
 
 /**
  * Culculate how many hours work at 22:00 to 24:00.
@@ -179,7 +173,7 @@ void checkNight(WorkHours *, time_t, time_t);
  * @param time_t		s		The time of start[sec] to work.
  * @param time_t		e		The time of end[sec] to work.
  */
-void checkLateNight(WorkHours *, time_t, time_t);
+void checkLateNight(DailyWorkHours *, time_t, time_t);
 
 /**
  * Culculate how many hours work at 24:00 to 29:00.
@@ -187,7 +181,7 @@ void checkLateNight(WorkHours *, time_t, time_t);
  * @param time_t		s		The time of start[sec] to work.
  * @param time_t		e		The time of end[sec] to work.
  */
-void checkMidnight(WorkHours *, time_t, time_t);
+void checkMidnight(DailyWorkHours *, time_t, time_t);
 
 
 /**
@@ -196,7 +190,7 @@ void checkMidnight(WorkHours *, time_t, time_t);
  * @param WorkHours *	total		The total working hours structure.
  * @return int		The code; 1:end, 2:error, 0:success.
  */
-int initTotalWorkHoursStruct(char *, WorkHours *);
+int initTotalWorkHoursStruct(char *, TotalWorkHours *);
 
 /**
  * Initialize the daily working hours structure.
@@ -204,7 +198,7 @@ int initTotalWorkHoursStruct(char *, WorkHours *);
  * @param WorkHours *	daily		The daily working hours structure.
  * @return int		The code; 1:end, 2:error, 0:success.
  */
-int initDailyWorkHoursStruct(char *, WorkHours *);
+int initDailyWorkHoursStruct(char *, DailyWorkHours *);
 
 /**
  * Culculate how many hours work overtime.
@@ -212,7 +206,7 @@ int initDailyWorkHoursStruct(char *, WorkHours *);
  * @param WorkHours *	daily		The daily working hours structure.
  * @return int		The code; 1:end, 2:error, 0:success.
  */
-int culcWorkHours(WorkHours *, WorkHours *);
+int culcWorkHours(int , DailyWorkHours *);
 
 /**
  * Check weekly working hours on today.
@@ -222,4 +216,4 @@ int culcWorkHours(WorkHours *, WorkHours *);
  * @param time_t		temp_weeklyWH	Weekly working hours.
  * @return time_t		Updated weekly working hours.
  */
-time_t checkWeeklyWH(WorkHours *, int, int, time_t);
+time_t checkWeeklyWH(DailyWorkHours *, int, int, time_t);

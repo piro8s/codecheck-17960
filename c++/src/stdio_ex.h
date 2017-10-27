@@ -5,4 +5,4 @@
  */
 void flush(void);
 
-int log(char *, char *);
+int log(const char *, const char *);
