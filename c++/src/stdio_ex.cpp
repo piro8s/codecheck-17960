@@ -1,11 +1,17 @@
 #include "stdio_ex.h"
+#include <stdarg.h>
+#include <string.h>
+#include <errno.h>
+#include <time.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 void err_msg(const char *file, const char *function, int line, const char *type, const char *fmt, ...) {
-	// time_t timer;
-	// time(&timer);
-	// char *t = ctime(&timer);
-	// t[strlen(t)-1] = '\0';
-	// fprintf(stderr, "%s ", t); /* 現在時刻を表示 */
+	time_t timer;
+	time(&timer);
+	char *t = ctime(&timer);
+	t[strlen(t)-1] = '\0';
+	fprintf(stderr, "%s ", t); /* 現在時刻を表示 */
 
 	fprintf(stderr, "%d ", getpid()); /* プロセスIDを出力 */
 	fprintf(stderr, "%s %s %d %s ", file, function, line, type);
