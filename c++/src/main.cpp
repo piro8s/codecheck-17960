@@ -10,7 +10,7 @@ int main() {
 	//Target Year-Month
 	scanf("%7s", in_ym);
 	flush();
-	char *msg; sprintf(msg, "%s\n", in_ym);
+	// char *msg; sprintf(msg, "%s\n", in_ym);
 	//Log("DEBUG", msg);
 	int initTWH = initTotalWorkHours(in_ym, total);
 	// if (initTWH == ERROR_P) return 1;
@@ -21,13 +21,13 @@ int main() {
 		static int lastWorkWeekday = 7;
 		DailyWorkHours *daily = (DailyWorkHours *)malloc(sizeof(DailyWorkHours));
 		// inputstreamの頭の0を削除する
-		if (lastWorkDay != 0) {
-			int c = fgetc(stdin);
-			if (c != '0') {
-				sprintf(msg, "fgetc:%c\n", c);
-				//Log("DEBUG", msg);
-			}
-		}
+		// if (lastWorkDay != 0) {
+		// 	int c = fgetc(stdin);
+		// 	if (c != '0') {
+		// 		sprintf(msg, "fgetc:%c\n", c);
+		// 		Log("DEBUG", msg);
+		// 	}
+		// }
 
 		scanf("%60[ 0-9/:-]", in_wh);
 		flush();
@@ -43,7 +43,7 @@ int main() {
 		setWeeklyWHOf(daily, temp_weeklyWH);
 		// daily->weeklyWH = temp_weeklyWH;
 		// inputstreamの頭に0を追加する
-		fputc('0', stdin);
+		// fputc('0', stdin);
 
 		int culcWH = culcWorkHours(total->yearMonth, daily);
 
