@@ -22,9 +22,9 @@ int main() {
 		DailyWorkHours *daily = (DailyWorkHours *)malloc(sizeof(DailyWorkHours));
 		// inputstreamの頭の0を削除する
 		if (lastWorkDay != 0) {
-			int fgetc = fgetc(stdin);
-			if (fgetc != '0') {
-				sprintf(msg, "fgetc:%c\n", fgetc);
+			int c = fgetc(stdin);
+			if (c != '0') {
+				sprintf(msg, "fgetc:%c\n", c);
 				Log("DEBUG", msg);
 			}
 		}
