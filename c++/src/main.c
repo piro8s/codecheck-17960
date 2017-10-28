@@ -8,10 +8,11 @@ int main() {
 	int i=0, j=0;
 
 	//Target Year-Month
-	scanf("%7s", in_ym);
+	scanf("%7[0-9/]", in_ym);
 	flush();
+
 	int initTWH = initTotalWorkHours(in_ym, total);
-	if (initTWH == ERROR_P) return 1;
+	// if (initTWH == ERROR_P) return 1;
 
 	while(1) {
 		static time_t temp_weeklyWH = (time_t)0;

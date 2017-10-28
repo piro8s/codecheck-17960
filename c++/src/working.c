@@ -41,7 +41,7 @@ int initDailyWorkHours(char *in, DailyWorkHours *daily) {
 	if (isEnd(in)==END) return END;
 
 	splitCount = split(in, ' ', splited);
-	if (splitCount < 1) return 2;
+	if (splitCount < 1) return ERROR_P;
 	for (i=0; i<splitCount; i++) {
 		daily->workPeriod[i] = splited[i+1];
 	}
