@@ -8,46 +8,59 @@ int main() {
 	int i=0, j=0;
 
 	//Target Year-Month
-	int ym = scanf("%7s", in_ym);
+	scanf("%7s", in_ym);
 	flush();
 	char *msg; sprintf(msg, "%s\n", in_ym);
 	Log("DEBUG", msg);
-	if (initTotalWorkHoursStruct(in_ym, total)) return 0;
+	int initTWH = initTotalWorkHours(in_ym, total);
+	if (initTWH == ERROR) return 1;
 
 	while(1) {
 		static time_t temp_weeklyWH = (time_t)0;
 		static int lastWorkDay = 0;
 		static int lastWorkWeekday = 7;
 		DailyWorkHours *daily = (DailyWorkHours *)malloc(sizeof(DailyWorkHours));
+		// inputstreamの頭の0を削除する
+		if (lastWorkDay != 0) {
+			int fgetc = fgetc(stdin);
+			if (fgetc != '0') {
+				sprintf(msg, "fgetc:%c\n", fgetc);
+				Log("DEBUG", msg);
+			}
+		}
+
 		scanf("%60[ 0-9/:-]", in_wh);
 		flush();
 
-		int initWH = initDailyWorkHoursStruct(in_wh, daily);
+		int initDWH = initDailyWorkHours(in_wh, daily);
+		if (initDWH == END) break;
+		else if (initDWH == ERROR) return 1;
 
-		if (initWH == 1) break;
-		else if (initWH == 2) return 0;
-		else {
-			if (checkWorkDaily(daily, lastWorkDay, lastWorkWeekday) == FAIL) temp_weeklyWH = (time_t)0;
-			lastWorkDay = getWorkingDate(daily);
-			lastWorkWeekday = getWorkingWeekdayNum(daily);
-			daily->weeklyWH = temp_weeklyWH;
 
-			int culcWH = culcWorkHours(total->yearMonth, daily);
+		if (isWorkingOnSameWeek(daily, lastWorkDay, lastWorkWeekday) == FAILED) temp_weeklyWH = (time_t)0;
+		lastWorkDay = getWorkingDayNum(daily);
+		lastWorkWeekday = getWorkingWeekdayNum(daily);
+		setWeeklyWHOf(daily, temp_weeklyWH);
+		// daily->weeklyWH = temp_weeklyWH;
+		// inputstreamの頭に0を追加する
+		fputc('0', stdin);
 
-			if (culcWH == 1) continue;
-			else if (culcWH == 2) return 0;
+		int culcWH = culcWorkHours(total->yearMonth, daily);
 
-			total->nomalWH += daily->nomalWH;
-			total->fixedOWH += daily->fixedOWH;
-			total->legalOWH += daily->legalOWH;
-			total->midnightOWH += daily->midnightOWH;
-			total->nonlegalHolydayWH += daily->nonlegalHolydayWH;
-			total->legalHolydayWH += daily->legalHolydayWH;
+		if (culcWH == CONTINUE) continue;
+		else if (culcWH == ERROR) return 1;
 
-			temp_weeklyWH = weeklyWHOf(daily);
+		updateTotalWorkingHours(total, daily);
+		// total->nomalWH += daily->nomalWH;
+		// total->fixedOWH += daily->fixedOWH;
+		// total->legalOWH += daily->legalOWH;
+		// total->midnightOWH += daily->midnightOWH;
+		// total->nonlegalHolydayWH += daily->nonlegalHolydayWH;
+		// total->legalHolydayWH += daily->legalHolydayWH;
 
-			free(daily);
-		}
+		temp_weeklyWH = getWeeklyWHOf(daily);
+
+		free(daily);
 		i++;
 	}
 

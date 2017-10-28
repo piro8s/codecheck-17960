@@ -4,10 +4,11 @@
 #include "calender_ex.h"
 #include "time_ex.h"
 
-#define FAIL -1
+#define FAILED -1
 #define SUCCESS 0
 #define END 1
 #define ERROR 2
+#define CONTINUE 3
 
 #define TARGET_YEAR_MONTH_CHR_LEN 7
 #define WORKING_HOUR_PERIOD_CHR_LEN 60
@@ -15,7 +16,7 @@
 #define DAIRY_LEGAL_WORKING_HOUR_SEC 28800 //sec = 8 Hours
 #define WEEKLY_LEGAL_WORKING_HOUR_SEC 144000 //sec = 40 Hours
 #define MAX_DAYS 37
-#define MAX_BREAK_TIMES 3
+#define MAX_BREAK_TIMES 5
 
 /**
 * The working hours structure.
@@ -61,11 +62,41 @@ typedef struct {
 	time_t legalHolydayWH;
 } DailyWorkHours;
 
-extern int split_count;
+extern int splitCount;
 extern time_t atOpeningTime;
 extern time_t atClosingTime;
 extern time_t atBeginningOfLateNight;
 extern time_t atChangeOfDate;
+
+/**
+ * Check the input string means that it is end.
+ * @param char *	input		The input string.
+ * @return int		If it is true, return 1.
+ */
+int isEnd(char *);
+
+/**
+ * Check the input string means that it is error.
+ * @param char *	input		The input string.
+ * @return int		If it is true, return 1.
+ */
+int isError(char *);
+
+/**
+ * Initialize the total working hours structure.
+ * @param char *		in		The input string.
+ * @param WorkHours *	total		The total working hours structure.
+ * @return int		The code; 1:end, 2:error, 0:success.
+ */
+int initTotalWorkHours(char *, TotalWorkHours *);
+
+/**
+ * Initialize the daily working hours structure.
+ * @param char *		in			The input string.
+ * @param WorkHours *	daily		The daily working hours structure.
+ * @return int		The code; 1:end, 2:error, 0:success.
+ */
+int initDailyWorkHours(char *, DailyWorkHours *);
 
 /*
  * Setter and Getter
@@ -85,55 +116,45 @@ time_t getMidnightTime(void);
 void setSplitCount(const int);
 int getSplitCount(void);
 
-void setBegginingOfDay(DailyWorkHours *, const char *);
-time_t getBeggingOfday(DailyWorkHours *);
+void setWorkingDate(DailyWorkHours *, const char *);
+time_t getWorkingDate(DailyWorkHours *);
 
-int getWorkingDate(DailyWorkHours *);
 
+int getWorkingDayNum(DailyWorkHours *);
 int getWorkingWeekdayNum(DailyWorkHours *);
 
-int isEnd(char *);
+void setWeeklyWHOf(DailyWorkHours *, time_t);
+time_t getWeeklyWHOf(DailyWorkHours *);
 
-int isError(char *);
+int getWorkingDayNum(DailyWorkHours *);
+int getWorkingWeekdayNum(DailyWorkHours *);
 
-int checkWorkDaily(DailyWorkHours *, int, int);
+int isWorkingOnSameWeek(DailyWorkHours *, int, int);
 
 void addWorkingHours(DailyWorkHours *, time_t workinghours);
 
-/**
- * Get the target date.
- * @return int		The target date.
- */
-int targetDate();
+
+
+
+
+
+
+
+
 
 /**
  * Return the working hours[sec] of WorkHours.
  * @param WorkHours *	wh		The working hours structure.
  * @return time_t		The working hours[sec] of WorkHours.
  */
-time_t weeklyWHOf(DailyWorkHours *);
+time_t getWeeklyWHOf(DailyWorkHours *);
 
 /**
  * Return the weekday number of WorkHours.
  * @param WorkHours *	wh		The working hours structure.
  * @return int		The weekday number of WorkHours.
  */
-int weekdayNumOf(DailyWorkHours *);
-
-/**
- * Check the input string means that it is end.
- * @param char *	input		The input string.
- * @return int		If it is true, return 1.
- */
-int isEnd(char *);
-
-/**
- * Check the input string means that it is error.
- * @param char *	input		The input string.
- * @return int		If it is true, return 1.
- */
-int isError(char *);
-
+int getWeekdayNumOf(DailyWorkHours *);
 
 /**
  * Culculate how many hours work overtime.
@@ -182,23 +203,6 @@ void checkLateNight(DailyWorkHours *, time_t, time_t);
  * @param time_t		e		The time of end[sec] to work.
  */
 void checkMidnight(DailyWorkHours *, time_t, time_t);
-
-
-/**
- * Initialize the total working hours structure.
- * @param char *		in		The input string.
- * @param WorkHours *	total		The total working hours structure.
- * @return int		The code; 1:end, 2:error, 0:success.
- */
-int initTotalWorkHoursStruct(char *, TotalWorkHours *);
-
-/**
- * Initialize the daily working hours structure.
- * @param char *		in			The input string.
- * @param WorkHours *	daily		The daily working hours structure.
- * @return int		The code; 1:end, 2:error, 0:success.
- */
-int initDailyWorkHoursStruct(char *, DailyWorkHours *);
 
 /**
  * Culculate how many hours work overtime.

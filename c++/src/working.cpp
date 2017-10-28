@@ -6,6 +6,68 @@ time_t atClosingTime;
 time_t atLateNightTime;
 time_t atMidnightTime;
 
+/* 入力判定 */
+int isEnd(char *input) {
+	if (input[0] == '0') return END;
+	return SUCCESS;
+}
+int isError(char *input) {
+	if (input[0] == '1') return ERROR;
+	return SUCCESS;
+}
+
+int initTotalWorkHours(char *in, TotalWorkHours *total) {
+	if (strlen(in) != 10) return ERROR;
+	char *del;
+	del = (char *)malloc((strlen(in)-searchc(in, '/'))*sizeof(char));
+	if (delch(in, '/', del) != 2) return ERROR;
+
+	total->yearMonth = atoi(del);
+	total->fixedOWH = (time_t)0;
+	total->legalOWH = (time_t)0;
+	total->midnightOWH = (time_t)0;
+	total->nonlegalHolydayWH = (time_t)0;
+	total->legalHolydayWH = (time_t)0;
+
+	free(del);
+	return SUCCESS;
+}
+
+int initDailyWorkHours(char *in, DailyWorkHours *daily) {
+	char *splited[MAX_BREAK_TIMES+3];
+	int i;
+
+	if (isEnd(in)==END) return END;
+	else if (isError(in)==ERROR) return ERROR;
+
+	splitCount = split(in, ' ', splited);
+	if (splitCount < 1) return 2;
+	for (i=0; i<splitCount; i++) {
+		daily->workPeriod[i] = splited[i+1];
+	}
+
+	if (setWorkingDate(daily, splited[0]) == ERROR) return ERROR;
+	setOpeningTime(getWorkingDate(daily), EIGHT_HOUR_SEC);
+	setClosingTime(getWorkingDate(daily), SIXTEEN_HOUR_SEC);
+	setLateNightTime(getWorkingDate(daily), TWENTY_TWO_HOUR_SEC);
+	setMidnightTime(getWorkingDate(daily), TWENTY_FOUR_HOUR_SEC);
+
+	daily->weekdayNum = subZeller(getWorkingDate(daily));
+	daily->tmorrowWeekdayNum = subZeller(getWorkingDate(daily) + ONE_DAY_SEC);
+
+	daily->nomalWH = (time_t)0;
+	daily->fixedOWH = (time_t)0;
+	daily->legalOWH = (time_t)0;
+	daily->midnightOWH = (time_t)0;
+	daily->nonlegalHolydayWH = (time_t)0;
+	daily->legalHolydayWH = (time_t)0;
+	daily->dailyWH = (time_t)0;
+	daily->weeklyWH = (time_t)0;
+
+	return SUCCESS;
+}
+
+/* Opening Time */
 void setOpeningTime(const time_t zero, const time_t open) {
 	atOpeningTime = zero + open;
 }
@@ -13,6 +75,7 @@ time_t getOpeningTime(void) {
 	return atOpeningTime;
 }
 
+/* Closing Time */
 void setClosingTime(const time_t zero, const time_t close) {
 	atClosingTime = zero + close;
 }
@@ -20,6 +83,7 @@ time_t getClosingTime(void) {
 	return atClosingTime;
 }
 
+/* Start of Late Night Time */
 void setLateNightTime(const time_t zero, const time_t latenight) {
 	atLateNightTime = zero + latenight;
 }
@@ -27,6 +91,7 @@ time_t getLateNightTime(void) {
 	return atLateNightTime;
 }
 
+/* Start of Midnight Time */
 void setMidnightTime(const time_t zero, const time_t midnight) {
 	atMidnightTime = zero + midnight;
 }
@@ -34,6 +99,7 @@ time_t getMidnightTime(void) {
 	return atMidnightTime;
 }
 
+/* Split Count */
 void setSplitCount(const int cnt) {
 	splitCount = cnt;
 }
@@ -41,7 +107,8 @@ int getSplitCount(void) {
 	return splitCount;
 }
 
-int setBeggingOfday(DailyWorkHours *daily, const char *strYMD) {
+/* Working Date */
+int setWorkingDate(DailyWorkHours *daily, const char *strYMD) {
 	struct tm tm_struct;
 	char *ymd[3], ymd_temp[strlen(strYMD)+1];
 
@@ -58,38 +125,51 @@ int setBeggingOfday(DailyWorkHours *daily, const char *strYMD) {
 		return ERROR;
 	return SUCCESS;
 }
-time_t getBeggingOfday(DailyWorkHours *daily) {
+time_t getWorkingDate(DailyWorkHours *daily) {
 	return daily->today;
 }
 
-int getWorkingDate(DailyWorkHours *daily) {
-	return getDate(daily->today);
+/* Weekly Working Hours */
+void setWeeklyWHOf(DailyWorkHours *daily, time_t t) {
+	daily->weeklyWH = t;
+}
+time_t getWeeklyWHOf(DailyWorkHours *daily) {
+	return daily->weeklyWH;
 }
 
+/* getter: Working Day Number */
+int getWorkingDayNum(DailyWorkHours *daily) {
+	return getDate(daily->today);
+}
+/* getter: Working Weekday Number */
 int getWorkingWeekdayNum(DailyWorkHours *daily) {
 	return daily->weekdayNum;
 }
 
-int isEnd(char *input) {
-	if (input[0] == '0') return END;
+
+/* 同一週(月〜日)中の仕事か判定 */
+int isWorkingOnSameWeek(DailyWorkHours *daily, int lastWorkDay, int lastWorkWeekday) {
+	if ((getWorkingDayNum(daily) > lastWorkDay) && (getWorkingWeekdayNum(daily) < lastWorkWeekday)) return FAILED;
 	return SUCCESS;
 }
 
-int isError(char *input) {
-	if (input[0] == '1') return ERROR;
-	return SUCCESS;
-}
-
-int checkWorkDaily(DailyWorkHours *daily, int lastWorkDay, int lastWorkWeekday) {
-	if ((getWorkingDate(daily) > lastWorkDay) && (getWorkingWeekdayNum(daily) < lastWorkWeekday)) return FAIL;
-	return SUCCESS;
-}
-
+/* 労働した時間を、日次、週次の労働時間に追加 */
 void addWorkingHours(DailyWorkHours *daily, time_t workinghours) {
 	daily->dailyWH += workinghours;
 	daily->weeklyWH += workinghours;
 }
 
+/* 日次の労働時間等から月次の労働時間等を更新する */
+void updateTotalWorkingHours(TotalWorkHours *total, DailyWorkHours *daily) {
+	total->nomalWH += daily->nomalWH;
+	total->fixedOWH += daily->fixedOWH;
+	total->legalOWH += daily->legalOWH;
+	total->midnightOWH += daily->midnightOWH;
+	total->nonlegalHolydayWH += daily->nonlegalHolydayWH;
+	total->legalHolydayWH += daily->legalHolydayWH;
+}
+
+/* 残業していないか判定 */
 time_t checkOvertimeWorking(DailyWorkHours *daily, time_t diff) {
 	time_t overtime = (time_t)0;
 
@@ -156,7 +236,6 @@ void checkDaytime(DailyWorkHours *daily, time_t s, time_t e) {
 	}
 	addWorkingHours(daily, diff);
 }
-
 
 //17-22{法定内/法定外}/{所定休日/法定休日}
 void checkNight(DailyWorkHours *daily, time_t s, time_t e) {
@@ -238,74 +317,28 @@ void checkMidnight(DailyWorkHours *daily, time_t s, time_t e) {
 	addWorkingHours(daily, diff);
 }
 
-int initTotalWorkHours(char *in, TotalWorkHours *total) {
-	if (isEnd(in)==END || isError(in)==ERROR) return END;
-	char *del;
-	del = (char *)malloc((strlen(in)-searchc(in, '/'))*sizeof(char));
-	if (delch(in, '/', del) == 0) return ERROR;
-
-	total->yearMonth = atoi(del);
-	total->fixedOWH = (time_t)0;
-	total->legalOWH = (time_t)0;
-	total->midnightOWH = (time_t)0;
-	total->nonlegalHolydayWH = (time_t)0;
-	total->legalHolydayWH = (time_t)0;
-
-	free(del);
-	return SUCCESS;
-}
-
-int initDailyWorkHours(char *in, DailyWorkHours *daily) {
-	char *splited[MAX_BREAK_TIMES+3];
-	int i;
-
-	if (isEnd(in)==END) return END;
-	else if (isError(in)==ERROR) return ERROR;
-
-	split_count = split(in, ' ', splited);
-	if (split_count < 1) return 2;
-	for (i=0; i<split_count; i++) {
-		daily->workPeriod[i] = splited[i+1];
-	}
-
-	if (setBeggingOfday(daily, splited[0]) == ERROR) return ERROR;
-	setOpeningTime(getBeggingOfday(daily), EIGHT_HOUR_SEC);
-	setClosingTime(getBeggingOfday(daily), SIXTEEN_HOUR_SEC);
-	setLateNightTime(getBeggingOfday(daily), TWENTY_TWO_HOUR_SEC);
-	setMidnightTime(getBeggingOfday(daily), TWENTY_FOUR_HOUR_SEC);
-
-	daily->weekdayNum = subZeller(getBeggingOfday(daily));
-	daily->tmorrowWeekdayNum = subZeller(getBeggingOfday(daily) + ONE_DAY_SEC);
-
-	daily->nomalWH = (time_t)0;
-	daily->fixedOWH = (time_t)0;
-	daily->legalOWH = (time_t)0;
-	daily->midnightOWH = (time_t)0;
-	daily->nonlegalHolydayWH = (time_t)0;
-	daily->legalHolydayWH = (time_t)0;
-	daily->dailyWH = (time_t)0;
-	daily->weeklyWH = (time_t)0;
-
-	return SUCCESS;
-}
-
 int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
-// int culcWorkHours(WorkHours *total, WorkHours *daily) {
 	time_t start_tm, end_tm;
 	struct tm tm_struct;
 	char *sewt[2], *shm[2], *ehm[2];
 	int hour, minute, dayStride;
-	int j;
-	for (j=0; j<split_count; j++) {
+	int i;
+	for (i=0; i<getSplitCount(); i++) {
 		// 時刻を Time型 に変換する
 		char *period = (char *)malloc(12*sizeof(char));
-		strcpy(period, daily->workPeriod[j]);
-		split(period, '-', sewt);
 		char *start = (char *)malloc(6*sizeof(char));
 		char *end = (char *)malloc(6*sizeof(char));
+
+		// "HH:mm-HH:mm" --> "HH:mm", "HH:mm"
+		strcpy(period, daily->workPeriod[i]);
+		split(period, '-', sewt);
+
+		// "HH:mm" --> "HH", "mm"
 		strcpy(start, sewt[0]);
-		strcpy(end, sewt[1]);
 		split(start, ':', shm);
+
+		// "HH:mm" --> "HH", "mm"
+		strcpy(end, sewt[1]);
 		split(end, ':', ehm);
 
 		//start time
@@ -340,98 +373,98 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 		// target year-month と daily->yearMonthDayのyear-month が一致していない場合は労働時間だけ計算する
 		if (targetYearMonth != getYearMonth(daily->today)) {
 			addWorkingHours(daily, difftime(end_tm, start_tm));
-			return END;
+			return CONTINUE;
 		}
 		// 労働時間数を計算する
-		if(start_tm < atOpeningTime) {
+		if(start_tm < getOpeningTime()) {
 			Log("DEBUG", "start < atOpeningTime, ");
-			if (end_tm <= atOpeningTime) {
+			if (end_tm <= getOpeningTime()) {
 				Log("DEBUG", "end <= atOpeningTime\n");//Moring(s-e)
 				checkMorning(daily, start_tm, end_tm);
 			}
-			else if (end_tm <= atClosingTime) {
+			else if (end_tm <= getClosingTime()) {
 				Log("DEBUG", "atOpeningTime < end <= atClosingTime\n");//Morning(s-8)/Daytime(8-e)
-				checkMorning(daily, start_tm, atOpeningTime);
-				checkDaytime(daily, atOpeningTime, end_tm);
+				checkMorning(daily, start_tm, getOpeningTime());
+				checkDaytime(daily, getOpeningTime(), end_tm);
 			}
-			else if (end_tm <= atBeginningOfLateNight) {
+			else if (end_tm <= getLateNightTime()) {
 				Log("DEBUG", "atClosingTime < end <= atBeginningOfLateNight \n");//Morning(s-8)/Daytime(8-16)/Night(16-e)
-				checkMorning(daily, start_tm, atOpeningTime);
-				checkDaytime(daily, atOpeningTime, atClosingTime);
-				checkNight(daily, atClosingTime, end_tm);
+				checkMorning(daily, start_tm, getOpeningTime());
+				checkDaytime(daily, getOpeningTime(), getClosingTime());
+				checkNight(daily, getClosingTime(), end_tm);
 			}
-			else if (end_tm <= atChangeOfDate) {
+			else if (end_tm <= getMidnightTime()) {
 				Log("DEBUG", "atBeginningOfLateNight < end \n");//Morning(s-8)/Daytime(8-16)/Night(16-22)/LateNight(22-e)
-				checkMorning(daily, start_tm, atOpeningTime);
-				checkDaytime(daily, atOpeningTime, atClosingTime);
-				checkNight(daily, atClosingTime, atBeginningOfLateNight);
-				checkLateNight(daily, atBeginningOfLateNight, end_tm);
+				checkMorning(daily, start_tm, getOpeningTime());
+				checkDaytime(daily, getOpeningTime(), getClosingTime());
+				checkNight(daily, getClosingTime(), getLateNightTime());
+				checkLateNight(daily, getLateNightTime(), end_tm);
 			}
-			else if (atChangeOfDate < end_tm) {
+			else if (getMidnightTime() < end_tm) {
 				Log("DEBUG", "atChangeOfDate < end \n");//Morning(s-8)/Daytime(8-16)/Night(16-22)/LateNight(22-24)/Midnight(24-e)
-				checkMorning(daily, start_tm, atOpeningTime);
-				checkDaytime(daily, atOpeningTime, atClosingTime);
-				checkNight(daily, atClosingTime, atBeginningOfLateNight);
-				checkLateNight(daily, atBeginningOfLateNight, atChangeOfDate);
-				checkMidnight(daily, atChangeOfDate, end_tm);
+				checkMorning(daily, start_tm, getOpeningTime());
+				checkDaytime(daily, getOpeningTime(), getClosingTime());
+				checkNight(daily, getClosingTime(), getLateNightTime());
+				checkLateNight(daily, getLateNightTime(), getMidnightTime());
+				checkMidnight(daily, getMidnightTime(), end_tm);
 			}
 		}
-		else if (atOpeningTime <= start_tm && start_tm < atClosingTime) {
+		else if (getOpeningTime() <= start_tm && start_tm < getClosingTime()) {
 			Log("DEBUG", "atOpeningTime <= start < atClosingTime, ");
-			if (end_tm <= atClosingTime) {
+			if (end_tm <= getClosingTime()) {
 				Log("DEBUG", "end <= atClosingTime\n");//Daytime(s-e)
 				checkDaytime(daily, start_tm, end_tm);
 			}
-			else if (end_tm <= atBeginningOfLateNight) {
+			else if (end_tm <= getLateNightTime()) {
 				Log("DEBUG", "atClosingTime < end <= atBeginningOfLateNight \n");//Daytime(s-16)/Night(16-e)
-				checkDaytime(daily, start_tm, atClosingTime);
-				checkNight(daily, atClosingTime, end_tm);
+				checkDaytime(daily, start_tm, getClosingTime());
+				checkNight(daily, getClosingTime(), end_tm);
 			}
-			else if (end_tm <= atChangeOfDate) {
+			else if (end_tm <= getMidnightTime()) {
 				Log("DEBUG", "atBeginningOfLateNight < end \n");//Daytime(s-16)/Night(16-22)/LateNight(22-e)
-				checkDaytime(daily, start_tm, atClosingTime);
-				checkNight(daily, atClosingTime, atBeginningOfLateNight);
-				checkLateNight(daily, atBeginningOfLateNight, end_tm);
+				checkDaytime(daily, start_tm, getClosingTime());
+				checkNight(daily, getClosingTime(), getLateNightTime());
+				checkLateNight(daily, getLateNightTime(), end_tm);
 			}
-			else if (atChangeOfDate < end_tm) {
+			else if (getMidnightTime() < end_tm) {
 				Log("DEBUG", "atChangeOfDate < end \n");//Daytime(s-16)/Night(16-22)/LateNight(22-24)/Midnight(24-e)
-				checkDaytime(daily, start_tm, atClosingTime);
-				checkNight(daily, atClosingTime, atBeginningOfLateNight);
-				checkLateNight(daily, atBeginningOfLateNight, atChangeOfDate);
-				checkMidnight(daily, atChangeOfDate, end_tm);
+				checkDaytime(daily, start_tm, getClosingTime());
+				checkNight(daily, getClosingTime(), getLateNightTime());
+				checkLateNight(daily, getLateNightTime(), getMidnightTime());
+				checkMidnight(daily, getMidnightTime(), end_tm);
 			}
 		}
-		else if (atClosingTime <= start_tm && start_tm < atBeginningOfLateNight) {
+		else if (getClosingTime() <= start_tm && start_tm < getLateNightTime()) {
 			Log("DEBUG", "atClosingTime <= start < atBeginningOfLateNight, ");
-			if (end_tm <= atBeginningOfLateNight) {
+			if (end_tm <= getLateNightTime()) {
 				Log("DEBUG", "end <= atBeginningOfLateNight \n");//Night(s-e)
 				checkNight(daily, start_tm, end_tm);
 			}
-			else if (end_tm <= atChangeOfDate) {
+			else if (end_tm <= getMidnightTime()) {
 				Log("DEBUG", "atBeginningOfLateNight < end \n");//Night(s-22)/LateNight(22-e)
-				checkNight(daily, start_tm, atBeginningOfLateNight);
-				checkLateNight(daily, atBeginningOfLateNight, end_tm);
+				checkNight(daily, start_tm, getLateNightTime());
+				checkLateNight(daily, getLateNightTime(), end_tm);
 			}
-			else if (atChangeOfDate < end_tm) {
+			else if (getMidnightTime() < end_tm) {
 				Log("DEBUG", "atChangeOfDate < end \n");//Night(s-22)/LateNight(22-24)/Midnight(24-e)
-				checkNight(daily, start_tm, atBeginningOfLateNight);
-				checkLateNight(daily, atBeginningOfLateNight, atChangeOfDate);
-				checkMidnight(daily, atChangeOfDate, end_tm);
+				checkNight(daily, start_tm, getLateNightTime());
+				checkLateNight(daily, getLateNightTime(), getMidnightTime());
+				checkMidnight(daily, getMidnightTime(), end_tm);
 			}
 		}
-		else if (atBeginningOfLateNight <= start_tm && start_tm < atChangeOfDate) {
+		else if (getLateNightTime() <= start_tm && start_tm < getMidnightTime()) {
 			Log("DEBUG", "atBeginningOfLateNight <= start_tm < atChangeOfDate, ");
-			if (end_tm <= atChangeOfDate) {
+			if (end_tm <= getMidnightTime()) {
 				Log("DEBUG", "atBeginningOfLateNight < end <= atChangeOfDate\n");//LateNight(s-e)
 				checkLateNight(daily, start_tm, end_tm);
 			}
-			else if (atChangeOfDate < end_tm) {
+			else if (getMidnightTime() < end_tm) {
 				Log("DEBUG", "atChangeOfDate < end \n");//LateNight(s-24)/Midnight(24-e)
-				checkLateNight(daily, start_tm, atChangeOfDate);
-				checkMidnight(daily, atChangeOfDate, end_tm);
+				checkLateNight(daily, start_tm, getMidnightTime());
+				checkMidnight(daily, getMidnightTime(), end_tm);
 			}
 		}
-		else if (atChangeOfDate <= start_tm) {
+		else if (getMidnightTime() <= start_tm) {
 			Log("DEBUG", "atChangeOfDate < start\n");//Midnight(s-e)
 			checkMidnight(daily, start_tm, end_tm);
 		}

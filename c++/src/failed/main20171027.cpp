@@ -432,15 +432,15 @@ printf("line%d\n", __LINE__);
 			time_t atTwentyNine;
 
 printf("line%d:%s\n", __LINE__, in_wh);
-			int split_count = split(in_wh, " ", splited);
+			int splitCount = split(in_wh, " ", splited);
 			daily->yearMonthDay = splited[0];
 printf("line%d\n", __LINE__);
-			if (split_count < 1)  {
+			if (splitCount < 1)  {
 				if (i == 0) return 0;
 				else break;
 			}
 printf("line%d\n", __LINE__);
-			for (j=1; j<split_count+1; j++) {
+			for (j=1; j<splitCount+1; j++) {
 printf("line%d\n", __LINE__);
 				daily->workTime[j-1] = splited[j];
 			}
@@ -500,7 +500,7 @@ printf("line%d\n", __LINE__);
 printf("line%d\n", __LINE__);
 			char *sewt[2], *shm[2], *ehm[2];
 printf("line%d\n", __LINE__);
-			for (j=0; j<split_count; j++) {
+			for (j=0; j<splitCount; j++) {
 printf("line%d\n", __LINE__);
 				char *worktime = (char *)malloc(12);
 printf("line%d\n", __LINE__);
