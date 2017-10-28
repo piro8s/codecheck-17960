@@ -11,9 +11,9 @@ int main() {
 	scanf("%7s", in_ym);
 	flush();
 	char *msg; sprintf(msg, "%s\n", in_ym);
-	ERROR(msg);
+	//Log("DEBUG", msg);
 	int initTWH = initTotalWorkHours(in_ym, total);
-	if (initTWH == ERROR_P) return 1;
+	// if (initTWH == ERROR_P) return 1;
 
 	while(1) {
 		static time_t temp_weeklyWH = (time_t)0;
@@ -25,7 +25,7 @@ int main() {
 			int c = fgetc(stdin);
 			if (c != '0') {
 				sprintf(msg, "fgetc:%c\n", c);
-				ERROR(msg);
+				//Log("DEBUG", msg);
 			}
 		}
 
@@ -34,7 +34,7 @@ int main() {
 
 		int initDWH = initDailyWorkHours(in_wh, daily);
 		if (initDWH == END) break;
-		else if (initDWH == ERROR_P) return 1;
+		// else if (initDWH == ERROR_P) return 1;
 
 
 		if (isWorkingOnSameWeek(daily, lastWorkDay, lastWorkWeekday) == FAILED) temp_weeklyWH = (time_t)0;
@@ -48,7 +48,7 @@ int main() {
 		int culcWH = culcWorkHours(total->yearMonth, daily);
 
 		if (culcWH == CONTINUE) continue;
-		else if (culcWH == ERROR_P) return 1;
+		// else if (culcWH == ERROR_P) return 1;
 
 		updateTotalWorkingHours(total, daily);
 		// total->nomalWH += daily->nomalWH;
@@ -64,18 +64,12 @@ int main() {
 		i++;
 	}
 
-	// sprintf("%d\n", roundSecToHour(total->nomalWH));
-	// ERROR(msg);
-	sprintf(msg, "%d\n", roundSecToHour(total->fixedOWH));
-	ERROR(msg);
-	sprintf(msg, "%d\n", roundSecToHour(total->legalOWH));
-	ERROR(msg);
-	sprintf(msg, "%d\n", roundSecToHour(total->midnightOWH));
-	ERROR(msg);
-	sprintf(msg, "%d\n", roundSecToHour(total->nonlegalHolydayWH));
-	ERROR(msg);
-	sprintf(msg, "%d\n", roundSecToHour(total->legalHolydayWH));
-	ERROR(msg);
+	// printf("%d\n", roundSecToHour(total->nomalWH));
+	printf("%d\n", roundSecToHour(total->fixedOWH));
+	printf("%d\n", roundSecToHour(total->legalOWH));
+	printf("%d\n", roundSecToHour(total->midnightOWH));
+	printf("%d\n", roundSecToHour(total->nonlegalHolydayWH));
+	printf("%d\n", roundSecToHour(total->legalHolydayWH));
 
 	return 0;
 }
