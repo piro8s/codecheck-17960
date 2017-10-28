@@ -3,4 +3,3 @@ java/target/
 scala/target/
 python/**/*.pyc
 c++/**/*.o
-c++/src/failed
