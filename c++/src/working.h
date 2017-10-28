@@ -133,36 +133,9 @@ int isWorkingOnSameWeek(DailyWorkHours *, int, int);
 
 void addWorkingHours(DailyWorkHours *, time_t workinghours);
 
+void updateTotalWorkingHours(TotalWorkHours *, DailyWorkHours *);
 
-
-
-
-
-
-
-
-
-/**
- * Return the working hours[sec] of WorkHours.
- * @param WorkHours *	wh		The working hours structure.
- * @return time_t		The working hours[sec] of WorkHours.
- */
-time_t getWeeklyWHOf(DailyWorkHours *);
-
-/**
- * Return the weekday number of WorkHours.
- * @param WorkHours *	wh		The working hours structure.
- * @return int		The weekday number of WorkHours.
- */
-int getWeekdayNumOf(DailyWorkHours *);
-
-/**
- * Culculate how many hours work overtime.
- * @param WorkHours *	wh		The working hours structure.
- * @param time_t		diff	The diff time[sec] to be added to working hours.
- * @return time_t		The time[sec] how many hours work overtime.
- */
-time_t checkOvertimeWorking(DailyWorkHours *, time_t);
+time_t checkOvertimeWorking(DailyWorkHours *, time_t );
 
 /**
  * Culculate how many hours work at 5:00 to 8:00.
@@ -212,12 +185,3 @@ void checkMidnight(DailyWorkHours *, time_t, time_t);
  */
 int culcWorkHours(int , DailyWorkHours *);
 
-/**
- * Check weekly working hours on today.
- * @param WorkHours *	daily			The daily working hours structure.
- * @param int			lastWorkDay		The date of working last time.
- * @param int			lastWorkWeekday	The weekday number of working last time.
- * @param time_t		temp_weeklyWH	Weekly working hours.
- * @return time_t		Updated weekly working hours.
- */
-time_t checkWeeklyWH(DailyWorkHours *, int, int, time_t);
