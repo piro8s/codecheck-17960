@@ -36,3 +36,15 @@ int subZeller(time_t);
  * @return int		The weekday number; 0:Sunday - 6:Saurday.
  */
 int isNationalHoloday(time_t);
+
+/**
+ * Culculate whether the year is the leap year.
+ * According to the Japanese Labor Standards Law, 
+ * transfer holidays of national holidays are treated as non-legal holidays.
+ * Non-legal holidau is same as Saturday.
+ * @param time_t	t	 The time[sec] from 1900-01-01 00:00:00.
+ * @return int		The weekday number; 0:Sunday - 6:Saurday.
+ */
+int IsLeapYear(int);
+
+time_t getEndOfMonth(time_t);

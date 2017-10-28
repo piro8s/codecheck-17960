@@ -2,7 +2,6 @@
 #include "stdio_ex.h"
 
 void lntrim(char *str) {
-printf("##%s\n", __func__);
 	int i = 0;
 	while(1) {
 	if(str[i] == '\n') {
@@ -14,7 +13,6 @@ printf("##%s\n", __func__);
 }
 
 int searchc(char *str, char c){
-printf("##%s\n", __func__);
 	int i, cnt = 0;
 
 	for(i=0; i<strlen(str); i++){
@@ -24,7 +22,6 @@ printf("##%s\n", __func__);
 }
 
 int split(char *str, char c, char *outlist[] ) {
-printf("##%s\n", __func__);
 	char *tk;
 	int cnt = searchc(str, c);
 	int i;
@@ -42,7 +39,6 @@ printf("##%s\n", __func__);
 }
 
 int delch(char *str, char c, char *out) {
-printf("##%s\n", __func__);
 	int i, j;
 
 	for (i=0,j=0; i<strlen(str); i++) {

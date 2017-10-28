@@ -8,18 +8,15 @@ time_t atMidnightTime;
 
 /* 入力判定 */
 int isEnd(char *input) {
-printf("##%s\n", __func__);
 	if (input[0] == '0') return END;
 	return SUCCESS;
 }
 int isERROR_P(char *input) {
-printf("##%s\n", __func__);
 	if (input[0] == '1') return ERROR_P;
 	return SUCCESS;
 }
 
 int initTotalWorkHours(char *in, TotalWorkHours *total) {
-printf("##%s\n", __func__);
 	if (strlen(in) != 7) return ERROR_P;
 	char *del;
 	del = (char *)malloc((strlen(in)-searchc(in, '/'))*sizeof(char));
@@ -37,9 +34,26 @@ printf("##%s\n", __func__);
 	return SUCCESS;
 }
 
+int isEndOnMonth(DailyWorkHours *daily) {
+	//月末美取得
+	time_t eom = getEndOfMonth(daily->today);
+	//月末の曜日番号取得(日-土:0-6)
+	int wnum = subZeller(eom);
+	//0,6の場合、-1dayして再度曜日番号取得
+	//1-5になるまで繰り返す
+	struct tm *t_tm;
+	while (wnum < 1 || 5 < wnum) {
+		t_tm = localtime(&eom);
+		t_tm->tm_mday -= 1;
+		eom = mktime(t_tm);
+		wnum = subZeller(eom);
+	}
+	//入力が月末(営業日)なら
+	if (getDate(daily->today) == getDate(eom)) return END;
+}
+
 int initDailyWorkHours(char *in, DailyWorkHours *daily) {
-printf("##%s\n", __func__);
-	if (strlen(in) < 22) return ERROR_P;
+
 	char *splited[MAX_BREAK_TIMES+3];
 	int i;
 
@@ -56,10 +70,11 @@ printf("##%s\n", __func__);
 	setClosingTime(getWorkingDate(daily), SIXTEEN_HOUR_SEC);
 	setLateNightTime(getWorkingDate(daily), TWENTY_TWO_HOUR_SEC);
 	setMidnightTime(getWorkingDate(daily), TWENTY_FOUR_HOUR_SEC);
-
+	
 	daily->weekdayNum = subZeller(getWorkingDate(daily));
 	daily->tmorrowWeekdayNum = subZeller(getWorkingDate(daily) + ONE_DAY_SEC);
 
+printf("daily->weekdayNum=%d\n", getWorkingWeekdayNum(daily));
 	daily->nomalWH = (time_t)0;
 	daily->fixedOWH = (time_t)0;
 	daily->legalOWH = (time_t)0;
@@ -74,124 +89,117 @@ printf("##%s\n", __func__);
 
 /* Opening Time */
 void setOpeningTime(const time_t zero, const time_t open) {
-printf("##%s\n", __func__);
 	atOpeningTime = zero + open;
 }
 time_t getOpeningTime(void) {
-printf("##%s\n", __func__);
 	return atOpeningTime;
 }
 
 /* Closing Time */
 void setClosingTime(const time_t zero, const time_t close) {
-printf("##%s\n", __func__);
 	atClosingTime = zero + close;
 }
 time_t getClosingTime(void) {
-printf("##%s\n", __func__);
 	return atClosingTime;
 }
 
 /* Start of Late Night Time */
 void setLateNightTime(const time_t zero, const time_t latenight) {
-printf("##%s\n", __func__);
 	atLateNightTime = zero + latenight;
 }
 time_t getLateNightTime(void) {
-printf("##%s\n", __func__);
 	return atLateNightTime;
 }
 
 /* Start of Midnight Time */
 void setMidnightTime(const time_t zero, const time_t midnight) {
-printf("##%s\n", __func__);
 	atMidnightTime = zero + midnight;
 }
 time_t getMidnightTime(void) {
-printf("##%s\n", __func__);
 	return atMidnightTime;
 }
 
 /* Split Count */
 void setSplitCount(const int cnt) {
-printf("##%s\n", __func__);
 	splitCount = cnt;
 }
 int getSplitCount(void) {
-printf("##%s\n", __func__);
 	return splitCount;
 }
 
 /* Working Date */
 int setWorkingDate(DailyWorkHours *daily, const char *strYMD) {
-printf("##%s\n", __func__);
 	struct tm tm_struct;
 	char *ymd[3], ymd_temp[strlen(strYMD)+1];
 
 	strcpy(ymd_temp, strYMD);
 	split(ymd_temp, '/', ymd);
 
-printf("atoi(year)%d\n", atoi(ymd[0]));
-printf("atoi(month)%d\n", atoi(ymd[1]));
-printf("atoi(day)%d\n", atoi(ymd[2]));
+// printf("atoi(year)%d\n", atoi(ymd[0]));
+// printf("atoi(month)%d\n", atoi(ymd[1]));
+// printf("atoi(day)%d\n", atoi(ymd[2]));
 	tm_struct.tm_year = atoi(ymd[0]) - 1900;
 	tm_struct.tm_mon = atoi(ymd[1]) - 1;
 	tm_struct.tm_mday = atoi(ymd[2]);
 	tm_struct.tm_hour = 0;
 	tm_struct.tm_min = 0;
+	tm_struct.tm_sec = 0;
+	tm_struct.tm_isdst = -1;
 
 	time_t today = mktime(&tm_struct);
 	if (today == (time_t)(-1)) return ERROR_P;
 	daily->today = today;
-	int ym = getYearMonth(today);
+	// printf("getYearMonth(today)=%d\n", getYearMonth(today));
 	// if ((daily->today = mktime(&tm_struct)) == (time_t)-1)
 	// 	return ERROR_P;
 	return SUCCESS;
 }
 time_t getWorkingDate(DailyWorkHours *daily) {
-printf("##%s\n", __func__);
 	return daily->today;
 }
 
 /* Weekly Working Hours */
 void setWeeklyWHOf(DailyWorkHours *daily, time_t t) {
-printf("##%s\n", __func__);
 	daily->weeklyWH = t;
 }
 time_t getWeeklyWHOf(DailyWorkHours *daily) {
-printf("##%s\n", __func__);
 	return daily->weeklyWH;
 }
 
 /* getter: Working Day Number */
 int getWorkingDayNum(DailyWorkHours *daily) {
-printf("##%s\n", __func__);
 	return getDate(daily->today);
 }
 /* getter: Working Weekday Number */
 int getWorkingWeekdayNum(DailyWorkHours *daily) {
-printf("##%s\n", __func__);
 	return daily->weekdayNum;
 }
 
 
 /* 同一週(月〜日)中の仕事か判定 */
-int isWorkingOnSameWeek(DailyWorkHours *daily, int lastWorkDay, int lastWorkWeekday) {
-printf("##%s\n", __func__);
-	if ((getWorkingDayNum(daily) > lastWorkDay) && (getWorkingWeekdayNum(daily) < lastWorkWeekday)) return FAILED;
-	return SUCCESS;
+int isWorkingOnSameWeek(DailyWorkHours *daily, int lastWorkDay) {
+
+	struct tm *last_tm;
+	time_t last;
+	last_tm = localtime(&(daily->today));
+	last_tm->tm_mday = lastWorkDay;
+	last = mktime(last_tm);
+
+	if ((lastWorkDay < getWorkingDayNum(daily)) 
+		&& (localtime(&last)->tm_wday < localtime(&(daily->today))->tm_wday)) return TRUE;
+	return FALSE;
 }
 
 /* 労働した時間を、日次、週次の労働時間に追加 */
 void addWorkingHours(DailyWorkHours *daily, time_t workinghours) {
-printf("##%s\n", __func__);
 	daily->dailyWH += workinghours;
 	daily->weeklyWH += workinghours;
 }
 
 /* 日次の労働時間等から月次の労働時間等を更新する */
 void updateTotalWorkingHours(TotalWorkHours *total, DailyWorkHours *daily) {
-printf("##%s\n", __func__);
+
+	total->workingHours += daily->dailyWH;
 	total->nomalWH += daily->nomalWH;
 	total->fixedOWH += daily->fixedOWH;
 	total->legalOWH += daily->legalOWH;
@@ -202,7 +210,6 @@ printf("##%s\n", __func__);
 
 /* 残業していないか判定 */
 time_t checkOvertimeWorking(DailyWorkHours *daily, time_t diff) {
-printf("##%s\n", __func__);
 	time_t overtime = (time_t)0;
 
 	//Already work overtime
@@ -219,7 +226,6 @@ printf("##%s\n", __func__);
 
 //5-8{法定内/法定外}/{所定休日/法定休日}
 void checkMorning(DailyWorkHours *daily, time_t s, time_t e) {
-printf("##%s\n", __func__);
 	int wd = daily->weekdayNum;
 	time_t diff = difftime(e, s);
 	time_t overtime;
@@ -246,7 +252,6 @@ printf("##%s\n", __func__);
 
 //8-16{所定/法定外}/{所定休日/法定休日}
 void checkDaytime(DailyWorkHours *daily, time_t s, time_t e) {
-printf("##%s\n", __func__);
 	int wd = daily->weekdayNum;
 	time_t diff = difftime(e, s);
 	time_t overtime;
@@ -273,7 +278,6 @@ printf("##%s\n", __func__);
 
 //17-22{法定内/法定外}/{所定休日/法定休日}
 void checkNight(DailyWorkHours *daily, time_t s, time_t e) {
-printf("##%s\n", __func__);
 	int wd = daily->weekdayNum;
 	time_t diff = difftime(e, s);
 	time_t overtime;
@@ -300,7 +304,6 @@ printf("##%s\n", __func__);
 
 //22-24{法定内/法定外}/{所定休日/法定休日} +{深夜}
 void checkLateNight(DailyWorkHours *daily, time_t s, time_t e) {
-printf("##%s\n", __func__);
 	int wd = daily->weekdayNum;
 	time_t diff = difftime(e, s);
 	time_t overtime;
@@ -328,7 +331,6 @@ printf("##%s\n", __func__);
 
 //24-29<<翌日判定>>{法定内/法定外}/{所定休日/法定休日} +{深夜}
 void checkMidnight(DailyWorkHours *daily, time_t s, time_t e) {
-printf("##%s\n", __func__);
 	int wd = daily->tmorrowWeekdayNum;
 	time_t diff = difftime(e, s);
 	time_t overtime;
@@ -355,12 +357,12 @@ printf("##%s\n", __func__);
 }
 
 int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
-printf("##%s\n", __func__);
 	time_t start_tm, end_tm;
-	struct tm tm_struct;
+	struct tm *tm_struct;
 	char *sewt[2], *shm[2], *ehm[2];
 	int hour, minute, dayStride;
 	int i;
+	tm_struct = localtime(&(daily->today));
 	for (i=0; i<getSplitCount(); i++) {
 		// 時刻を Time型 に変換する
 		char *period = (char *)malloc(12*sizeof(char));
@@ -387,10 +389,10 @@ printf("##%s\n", __func__);
 			dayStride = 1;
 			hour -= 24;
 		}
-		tm_struct.tm_mday += dayStride;
-		tm_struct.tm_hour = hour;
-		tm_struct.tm_min = minute;
-		if ((start_tm = mktime(&tm_struct)) == (time_t)-1)
+		tm_struct->tm_mday += dayStride;
+		tm_struct->tm_hour = hour;
+		tm_struct->tm_min = minute;
+		if ((start_tm = mktime(tm_struct)) == (time_t)-1)
 			return ERROR_P;
 
 		//end time
@@ -401,10 +403,10 @@ printf("##%s\n", __func__);
 			dayStride = 1;
 			hour -= 24;
 		}
-		tm_struct.tm_mday += dayStride;
-		tm_struct.tm_hour = hour;
-		tm_struct.tm_min = minute;
-		if ((end_tm = mktime(&tm_struct)) == (time_t)-1)
+		tm_struct->tm_mday += dayStride;
+		tm_struct->tm_hour = hour;
+		tm_struct->tm_min = minute;
+		if ((end_tm = mktime(tm_struct)) == (time_t)-1)
 			return ERROR_P;
 
 		// 労働時間を計算する
@@ -415,6 +417,9 @@ printf("##%s\n", __func__);
 			addWorkingHours(daily, difftime(end_tm, start_tm));
 			return CONTINUE;
 		}
+		printf("#culcWorkHours#zero:%d\n", daily->today);
+		printf("#culcWorkHours#start:%d\n", start_tm);
+		printf("#culcWorkHours#end:%d\n", end_tm);
 		// 労働時間数を計算する
 		if(start_tm < getOpeningTime()) {
 			//Log("DEBUG", "start < atOpeningTime, ");

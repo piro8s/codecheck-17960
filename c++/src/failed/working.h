@@ -4,7 +4,8 @@
 #include "calender_ex.h"
 #include "time_ex.h"
 
-#define FAILED -1
+#define FALSE -1
+#define TRUE 0
 #define SUCCESS 0
 #define END 1
 #define ERROR_P 2
@@ -38,6 +39,7 @@
 typedef struct {
 	int yearMonth;		//yyyymm
 
+	time_t workingHours;
 	time_t nomalWH;
 	time_t fixedOWH;
 	time_t legalOWH;
@@ -48,6 +50,7 @@ typedef struct {
 
 typedef struct {
 	time_t today;		//新しく追加しようとしている。yearMonthDayはこちらに変更
+	int yearMonth;		//yyyymm
 	int weekdayNum;
 	int tmorrowWeekdayNum;
 	char *workPeriod[MAX_BREAK_TIMES+1];	//労働年月日・労働時間ピリオド
@@ -127,10 +130,7 @@ int getWorkingWeekdayNum(DailyWorkHours *);
 void setWeeklyWHOf(DailyWorkHours *, time_t);
 time_t getWeeklyWHOf(DailyWorkHours *);
 
-int getWorkingDayNum(DailyWorkHours *);
-int getWorkingWeekdayNum(DailyWorkHours *);
-
-int isWorkingOnSameWeek(DailyWorkHours *, int, int);
+int isWorkingOnSameWeek(DailyWorkHours *, int);
 
 void addWorkingHours(DailyWorkHours *, time_t workinghours);
 
