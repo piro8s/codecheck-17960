@@ -17,7 +17,7 @@ int isERROR_P(char *input) {
 }
 
 int initTotalWorkHours(char *in, TotalWorkHours *total) {
-	if (strlen(in) != 11) return ERROR_P;
+	if (strlen(in) != 10) return ERROR_P;
 	char *del;
 	del = (char *)malloc((strlen(in)-searchc(in, '/'))*sizeof(char));
 	if (delch(in, '/', del) != 2) return ERROR_P;
@@ -34,7 +34,7 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 }
 
 int initDailyWorkHours(char *in, DailyWorkHours *daily) {
-	if (strlen(in) < 23) return ERROR_P;
+	if (strlen(in) < 22) return ERROR_P;
 	char *splited[MAX_BREAK_TIMES+3];
 	int i;
 
