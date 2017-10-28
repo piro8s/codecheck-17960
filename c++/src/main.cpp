@@ -11,7 +11,7 @@ int main() {
 	scanf("%7s", in_ym);
 	flush();
 	char *msg; sprintf(msg, "%s\n", in_ym);
-	//Log("DEBUG", msg);
+	ERROR(msg);
 	int initTWH = initTotalWorkHours(in_ym, total);
 	if (initTWH == ERROR_P) return 1;
 
@@ -25,7 +25,7 @@ int main() {
 			int c = fgetc(stdin);
 			if (c != '0') {
 				sprintf(msg, "fgetc:%c\n", c);
-				//Log("DEBUG", msg);
+				ERROR(msg);
 			}
 		}
 
@@ -65,17 +65,17 @@ int main() {
 	}
 
 	// sprintf("%d\n", roundSecToHour(total->nomalWH));
-	// //Log("DEBUG", msg);
+	// ERROR(msg);
 	sprintf(msg, "%d\n", roundSecToHour(total->fixedOWH));
-	//Log("DEBUG", msg);
+	ERROR(msg);
 	sprintf(msg, "%d\n", roundSecToHour(total->legalOWH));
-	//Log("DEBUG", msg);
+	ERROR(msg);
 	sprintf(msg, "%d\n", roundSecToHour(total->midnightOWH));
-	//Log("DEBUG", msg);
+	ERROR(msg);
 	sprintf(msg, "%d\n", roundSecToHour(total->nonlegalHolydayWH));
-	//Log("DEBUG", msg);
+	ERROR(msg);
 	sprintf(msg, "%d\n", roundSecToHour(total->legalHolydayWH));
-	//Log("DEBUG", msg);
+	ERROR(msg);
 
 	return 0;
 }
