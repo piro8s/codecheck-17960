@@ -7,7 +7,7 @@
 #define FAILED -1
 #define SUCCESS 0
 #define END 1
-#define ERROR 2
+#define ERROR_P 2
 #define CONTINUE 3
 
 #define TARGET_YEAR_MONTH_CHR_LEN 7
@@ -76,17 +76,17 @@ extern time_t atChangeOfDate;
 int isEnd(char *);
 
 /**
- * Check the input string means that it is error.
+ * Check the input string means that it is ERROR_P.
  * @param char *	input		The input string.
  * @return int		If it is true, return 1.
  */
-int isError(char *);
+int isERROR_P(char *);
 
 /**
  * Initialize the total working hours structure.
  * @param char *		in		The input string.
  * @param WorkHours *	total		The total working hours structure.
- * @return int		The code; 1:end, 2:error, 0:success.
+ * @return int		The code; 1:end, 2:ERROR_P, 0:success.
  */
 int initTotalWorkHours(char *, TotalWorkHours *);
 
@@ -94,7 +94,7 @@ int initTotalWorkHours(char *, TotalWorkHours *);
  * Initialize the daily working hours structure.
  * @param char *		in			The input string.
  * @param WorkHours *	daily		The daily working hours structure.
- * @return int		The code; 1:end, 2:error, 0:success.
+ * @return int		The code; 1:end, 2:ERROR_P, 0:success.
  */
 int initDailyWorkHours(char *, DailyWorkHours *);
 
@@ -116,7 +116,7 @@ time_t getMidnightTime(void);
 void setSplitCount(const int);
 int getSplitCount(void);
 
-void setWorkingDate(DailyWorkHours *, const char *);
+int setWorkingDate(DailyWorkHours *, const char *);
 time_t getWorkingDate(DailyWorkHours *);
 
 
@@ -181,7 +181,7 @@ void checkMidnight(DailyWorkHours *, time_t, time_t);
  * Culculate how many hours work overtime.
  * @param WorkHours *	total		The total working hours structure.
  * @param WorkHours *	daily		The daily working hours structure.
- * @return int		The code; 1:end, 2:error, 0:success.
+ * @return int		The code; 1:end, 2:ERROR_P, 0:success.
  */
 int culcWorkHours(int , DailyWorkHours *);
 

@@ -13,7 +13,7 @@ int main() {
 	char *msg; sprintf(msg, "%s\n", in_ym);
 	Log("DEBUG", msg);
 	int initTWH = initTotalWorkHours(in_ym, total);
-	if (initTWH == ERROR) return 1;
+	if (initTWH == ERROR_P) return 1;
 
 	while(1) {
 		static time_t temp_weeklyWH = (time_t)0;
@@ -34,7 +34,7 @@ int main() {
 
 		int initDWH = initDailyWorkHours(in_wh, daily);
 		if (initDWH == END) break;
-		else if (initDWH == ERROR) return 1;
+		else if (initDWH == ERROR_P) return 1;
 
 
 		if (isWorkingOnSameWeek(daily, lastWorkDay, lastWorkWeekday) == FAILED) temp_weeklyWH = (time_t)0;
@@ -48,7 +48,7 @@ int main() {
 		int culcWH = culcWorkHours(total->yearMonth, daily);
 
 		if (culcWH == CONTINUE) continue;
-		else if (culcWH == ERROR) return 1;
+		else if (culcWH == ERROR_P) return 1;
 
 		updateTotalWorkingHours(total, daily);
 		// total->nomalWH += daily->nomalWH;

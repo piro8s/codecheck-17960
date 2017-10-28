@@ -11,16 +11,16 @@ int isEnd(char *input) {
 	if (input[0] == '0') return END;
 	return SUCCESS;
 }
-int isError(char *input) {
-	if (input[0] == '1') return ERROR;
+int isERROR_P(char *input) {
+	if (input[0] == '1') return ERROR_P;
 	return SUCCESS;
 }
 
 int initTotalWorkHours(char *in, TotalWorkHours *total) {
-	if (strlen(in) != 11) return ERROR;
+	if (strlen(in) != 11) return ERROR_P;
 	char *del;
 	del = (char *)malloc((strlen(in)-searchc(in, '/'))*sizeof(char));
-	if (delch(in, '/', del) != 2) return ERROR;
+	if (delch(in, '/', del) != 2) return ERROR_P;
 
 	total->yearMonth = atoi(del);
 	total->fixedOWH = (time_t)0;
@@ -34,7 +34,7 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 }
 
 int initDailyWorkHours(char *in, DailyWorkHours *daily) {
-	if (strlen(in) < 23) return ERROR;
+	if (strlen(in) < 23) return ERROR_P;
 	char *splited[MAX_BREAK_TIMES+3];
 	int i;
 
@@ -46,7 +46,7 @@ int initDailyWorkHours(char *in, DailyWorkHours *daily) {
 		daily->workPeriod[i] = splited[i+1];
 	}
 
-	if (setWorkingDate(daily, splited[0]) == ERROR) return ERROR;
+	if (setWorkingDate(daily, splited[0]) == ERROR_P) return ERROR_P;
 	setOpeningTime(getWorkingDate(daily), EIGHT_HOUR_SEC);
 	setClosingTime(getWorkingDate(daily), SIXTEEN_HOUR_SEC);
 	setLateNightTime(getWorkingDate(daily), TWENTY_TWO_HOUR_SEC);
@@ -122,7 +122,7 @@ int setWorkingDate(DailyWorkHours *daily, const char *strYMD) {
 	tm_struct.tm_min = 0;
 
 	if ((daily->today = mktime(&tm_struct)) == (time_t)-1)
-		return ERROR;
+		return ERROR_P;
 	return SUCCESS;
 }
 time_t getWorkingDate(DailyWorkHours *daily) {
@@ -353,7 +353,7 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 		tm_struct.tm_hour = hour;
 		tm_struct.tm_min = minute;
 		if ((start_tm = mktime(&tm_struct)) == (time_t)-1)
-			return ERROR;
+			return ERROR_P;
 
 		//end time
 		hour = atoi(ehm[0]);
@@ -367,7 +367,7 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 		tm_struct.tm_hour = hour;
 		tm_struct.tm_min = minute;
 		if ((end_tm = mktime(&tm_struct)) == (time_t)-1)
-			return ERROR;
+			return ERROR_P;
 
 		// 労働時間を計算する
 		// target year-month と daily->yearMonthDayのyear-month が一致していない場合は労働時間だけ計算する
