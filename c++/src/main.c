@@ -26,7 +26,7 @@ int main() {
 		int initDWH = initDailyWorkHours(in_wh, daily);
 
 		if (initDWH == END) break;
-		else if (initDWH == ERROR_P) return 1;
+		else if (initDWH == ERROR_P) return 123;
 		if (isWorkingOnSameWeek(daily, lastWorkDay) == FALSE) temp_weeklyWH = (time_t)0;
 		lastWorkDay = getWorkingDayNum(daily);
 		lastWorkWeekday = getWorkingWeekdayNum(daily);
@@ -39,7 +39,7 @@ int main() {
 		temp_weeklyWH = getWeeklyWHOf(daily);
 
 		if (culcWH == CONTINUE) continue;
-		else if (culcWH == ERROR_P) return 1;
+		else if (culcWH == ERROR_P) return 456;
 
 		free(daily);
 		i++;
