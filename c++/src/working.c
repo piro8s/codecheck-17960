@@ -74,7 +74,6 @@ int initDailyWorkHours(char *in, DailyWorkHours *daily) {
 	daily->weekdayNum = subZeller(getWorkingDate(daily));
 	daily->tmorrowWeekdayNum = subZeller(getWorkingDate(daily) + ONE_DAY_SEC);
 
-printf("daily->weekdayNum=%d\n", getWorkingWeekdayNum(daily));
 	daily->nomalWH = (time_t)0;
 	daily->fixedOWH = (time_t)0;
 	daily->legalOWH = (time_t)0;
@@ -135,9 +134,6 @@ int setWorkingDate(DailyWorkHours *daily, const char *strYMD) {
 	strcpy(ymd_temp, strYMD);
 	split(ymd_temp, '/', ymd);
 
-// printf("atoi(year)%d\n", atoi(ymd[0]));
-// printf("atoi(month)%d\n", atoi(ymd[1]));
-// printf("atoi(day)%d\n", atoi(ymd[2]));
 	tm_struct.tm_year = atoi(ymd[0]) - 1900;
 	tm_struct.tm_mon = atoi(ymd[1]) - 1;
 	tm_struct.tm_mday = atoi(ymd[2]);
@@ -149,9 +145,6 @@ int setWorkingDate(DailyWorkHours *daily, const char *strYMD) {
 	time_t today = mktime(&tm_struct);
 	if (today == (time_t)(-1)) return ERROR_P;
 	daily->today = today;
-	// printf("getYearMonth(today)=%d\n", getYearMonth(today));
-	// if ((daily->today = mktime(&tm_struct)) == (time_t)-1)
-	// 	return ERROR_P;
 	return SUCCESS;
 }
 time_t getWorkingDate(DailyWorkHours *daily) {
@@ -411,15 +404,10 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 
 		// 労働時間を計算する
 		// target year-month と daily->yearMonthDayのyear-month が一致していない場合は労働時間だけ計算する
-		printf("targetYearMonth=%d\n", targetYearMonth);
-		printf("getYearMonth=%d\n", getYearMonth(daily->today));
 		if (targetYearMonth != getYearMonth(daily->today)) {
 			addWorkingHours(daily, difftime(end_tm, start_tm));
 			return CONTINUE;
 		}
-		printf("#culcWorkHours#zero:%d\n", daily->today);
-		printf("#culcWorkHours#start:%d\n", start_tm);
-		printf("#culcWorkHours#end:%d\n", end_tm);
 		// 労働時間数を計算する
 		if(start_tm < getOpeningTime()) {
 			//Log("DEBUG", "start < atOpeningTime, ");
