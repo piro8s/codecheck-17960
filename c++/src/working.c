@@ -1,3 +1,4 @@
+#include <regex.h>
 #include "include/working.h"
 
 int splitCount;
@@ -24,29 +25,54 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 
 	char del[TARGET_YEAR_MONTH_CHR_LEN];
 		// return __LINE__;
-	if ((int)strlen(in) <= 7) {
-		return __LINE__;
-		// delch(in, '/', del);
-		int i=0, j=0;
-		return __LINE__;
-		char c = '2';
-		return __LINE__;
-		int len = (int)strlen(in);
-		return __LINE__;
-		// return 800;
-		if (in[0] == c) return 801;
-		else return 802;
 
-
-		// for (i=0; i<strlen(in); i++) {
-		// 	if (in[i] == c) {
-		// 		j++;
-		// 		continue;
-		// 	}
-		// 	del[i-j] = in[i];
-		// }
-
+	regex_t preg; // 正規表現のオブジェクト
+	size_t num = 5;
+	regmatch_t pmatch[num]; // 正規表現にマッチしたインデックスを格納する構造体の配列
+	const char pattern[] = "([0-9]{4})/([0-9]{2})"; // マッチする文字列
+	int i=0, j=0, k=0;
+	if (regcomp(&preg, pattern, REG_EXTENDED|REG_NEWLINE) != 0) {
+		return 800;
 	}
+	if (regexec(&preg, in, num, pmatch, 0) != 0) {
+		return 801;
+	} else {
+		for (i = 1; i < num; i++) {
+			if (pmatch[i].rm_so >= 0 && pmatch[i].rm_eo >= 0) {
+				for (j = pmatch[i].rm_so ; j < pmatch[i].rm_eo; j++) {
+					del[k] = in[j];
+					k++;
+				}
+			}
+		}
+	}
+	regfree(&preg);
+
+	printf("del:%s\n", del);
+
+	// if ((int)strlen(in) <= 7) {
+	// 	return __LINE__;
+	// 	// delch(in, '/', del);
+	// 	int i=0, j=0;
+	// 	return __LINE__;
+	// 	char c = '2';
+	// 	return __LINE__;
+	// 	int len = (int)strlen(in);
+	// 	return __LINE__;
+	// 	// return 800;
+	// 	if (in[0] == c) return 801;
+	// 	else return 802;
+
+
+	// 	// for (i=0; i<strlen(in); i++) {
+	// 	// 	if (in[i] == c) {
+	// 	// 		j++;
+	// 	// 		continue;
+	// 	// 	}
+	// 	// 	del[i-j] = in[i];
+	// 	// }
+
+	// }
 	total->yearMonth = atoi(del);
 	total->nomalWH = (time_t)0;
 	total->fixedOWH = (time_t)0;
@@ -57,24 +83,6 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 
 	// free(del);
 	return SUCCESS;
-}
-
-int isEndOnMonth(DailyWorkHours *daily) {
-	//月末美取得
-	time_t eom = getEndOfMonth(daily->today);
-	//月末の曜日番号取得(日-土:0-6)
-	int wnum = subZeller(eom);
-	//0,6の場合、-1dayして再度曜日番号取得
-	//1-5になるまで繰り返す
-	struct tm *t_tm;
-	while (wnum < 1 || 5 < wnum) {
-		t_tm = localtime(&eom);
-		t_tm->tm_mday -= 1;
-		eom = mktime(t_tm);
-		wnum = subZeller(eom);
-	}
-	//入力が月末(営業日)なら
-	if (getDate(daily->today) == getDate(eom)) return END;
 }
 
 int initDailyWorkHours(char *in, DailyWorkHours *daily) {
@@ -193,6 +201,55 @@ int getWorkingWeekdayNum(DailyWorkHours *daily) {
 	return daily->weekdayNum;
 }
 
+int isYearMonthDay(char *in) {
+	regex_t preg; // 正規表現のオブジェクト
+	size_t num = 5;
+	regmatch_t pmatch[num]; // 正規表現にマッチしたインデックスを格納する構造体の配列
+	const char pattern[] = "([0-9]{4})/([0-9]{2})/([0-9]{2})"; // マッチする文字列
+	int i=0, j=0;
+	if (regcomp(&preg, pattern, REG_EXTENDED|REG_NEWLINE) != 0) {
+		printf("正規表現のコンパイルに失敗しました\n");
+		return -1;
+	}
+	if (regexec(&preg, in, num, pmatch, 0) != 0) {
+		printf("マッチしませんでした\n");
+	} else {
+		for (i = 0; i < num; i++) {
+			if (pmatch[i].rm_so >= 0 && pmatch[i].rm_eo >= 0) {
+				// マッチしたインデックスと文字列の表示
+				printf("マッチしたインデックスは%d~%d, in: ", (int)pmatch[i].rm_so, (int)pmatch[i].rm_eo);
+				for (j = pmatch[i].rm_so ; j < pmatch[i].rm_eo; j++) {
+					putchar(in[j]);
+				}
+			}
+			printf("\n");
+		}
+	}
+	regfree(&preg);
+	return 0;
+}
+
+int isHours(char *in) {
+	return 0;
+}
+
+int isEndOnMonth(DailyWorkHours *daily) {
+	//月末美取得
+	time_t eom = getEndOfMonth(daily->today);
+	//月末の曜日番号取得(日-土:0-6)
+	int wnum = subZeller(eom);
+	//0,6の場合、-1dayして再度曜日番号取得
+	//1-5になるまで繰り返す
+	struct tm *t_tm;
+	while (wnum < 1 || 5 < wnum) {
+		t_tm = localtime(&eom);
+		t_tm->tm_mday -= 1;
+		eom = mktime(t_tm);
+		wnum = subZeller(eom);
+	}
+	//入力が月末(営業日)なら
+	if (getDate(daily->today) == getDate(eom)) return END;
+}
 
 /* 同一週(月〜日)中の仕事か判定 */
 int isWorkingOnSameWeek(DailyWorkHours *daily, int lastWorkDay) {

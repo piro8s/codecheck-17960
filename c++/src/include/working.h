@@ -130,6 +130,8 @@ int getWorkingWeekdayNum(DailyWorkHours *);
 void setWeeklyWHOf(DailyWorkHours *, time_t);
 time_t getWeeklyWHOf(DailyWorkHours *);
 
+int isEndOnMonth(DailyWorkHours *);
+
 int isWorkingOnSameWeek(DailyWorkHours *, int);
 
 void addWorkingHours(DailyWorkHours *, time_t workinghours);
