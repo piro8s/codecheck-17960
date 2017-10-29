@@ -24,7 +24,18 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 
 	char del[TARGET_YEAR_MONTH_CHR_LEN];
 	if (strlen(in) <= 7) {
-		delch(in, '/', del);
+		// delch(in, '/', del);
+		int i=0, j=0;
+		char c = '/';
+
+		for (i=0; i<strlen(in); i++) {
+			if (in[i] == c) {
+				j++;
+				continue;
+			}
+			del[i-j] = in[i];
+		}
+
 	}
 	total->yearMonth = atoi(del);
 	total->nomalWH = (time_t)0;
