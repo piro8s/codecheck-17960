@@ -6,7 +6,7 @@
 #define WAITING_SEC 3
 
 int main(int argc, char *argv[]) {
-	printf("%d\n", argv[1][1]);
+	printf("%s\n", argv[1]);
 	// char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	// TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
 	// int i=0, j=0;
