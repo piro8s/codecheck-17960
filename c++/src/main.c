@@ -23,9 +23,9 @@ int main(int argc, char *argv[]) {
 	if (initTWH != SUCCESS) return initTWH;
 //*/
 //*
+		char *in_wh = (char *)calloc(WORKING_HOUR_PERIOD_CHR_LEN+1, sizeof(char));
 	while(1) {
 	// for (i=2; i<=argc; i++) {
-		char *in_wh = (char *)calloc(WORKING_HOUR_PERIOD_CHR_LEN+1, sizeof(char));
 		DailyWorkHours *daily = (DailyWorkHours *)malloc(sizeof(DailyWorkHours));
 		static time_t temp_weeklyWH = (time_t)0;
 		static int lastWorkDay = 0;
@@ -37,8 +37,7 @@ int main(int argc, char *argv[]) {
 		int flg =scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAITING_SEC);
 		if (in_wh[0] == '0') break;
 		flush();
-		printf("%s\n", in_wh);
-
+/*
 		// int initDWH = initDailyWorkHours(argv[i], daily);
 		int initDWH = initDailyWorkHours(in_wh, daily);
 		if (initDWH == END) break;
@@ -61,7 +60,10 @@ int main(int argc, char *argv[]) {
 		free(in_wh);
 		i++;
 		break; //debug
+		*/
 	}
+			printf("%s\n", in_wh);
+
 //*/
 
 	// printf("%d\n\n", roundSecToHour(total->workingHours));
