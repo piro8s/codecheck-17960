@@ -49,7 +49,6 @@ typedef struct {
 
 typedef struct {
 	time_t today;		//新しく追加しようとしている。yearMonthDayはこちらに変更
-	int yearMonth;		//yyyymm
 	int weekdayNum;
 	int tmorrowWeekdayNum;
 	char *workPeriod[MAX_BREAK_TIMES+1];	//労働年月日・労働時間ピリオド
@@ -119,7 +118,7 @@ time_t getMidnightTime(void);
 void setSplitCount(const int);
 int getSplitCount(void);
 
-int setWorkingDate(DailyWorkHours *, const char *);
+int setWorkingDate(DailyWorkHours *, char *);
 time_t getWorkingDate(DailyWorkHours *);
 
 

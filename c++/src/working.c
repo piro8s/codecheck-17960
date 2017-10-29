@@ -35,24 +35,22 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 }
 
 int initDailyWorkHours(char *in, DailyWorkHours *daily) {
-
 	char *splited[MAX_BREAK_TIMES+3];
 	int i;
 
 	if (isEnd(in)==END) return END;
-
 	splitCount = split(in, ' ', splited, WORKING_HOUR_PERIOD_CHR_LEN);
 	if (splitCount < 1) return 910;
 	for (i=0; i<splitCount; i++) {
 		daily->workPeriod[i] = splited[i+1];
 	}
 
-	if (setWorkingDate(daily, splited[0]) == ERROR_P) return 911;
+	int setWD = setWorkingDate(daily, splited[0]);
+	if (setWD == ERROR_P) return 911;
 	setOpeningTime(getWorkingDate(daily), EIGHT_HOUR_SEC);
 	setClosingTime(getWorkingDate(daily), SIXTEEN_HOUR_SEC);
 	setLateNightTime(getWorkingDate(daily), TWENTY_TWO_HOUR_SEC);
 	setMidnightTime(getWorkingDate(daily), TWENTY_FOUR_HOUR_SEC);
-	
 	daily->weekdayNum = subZeller(getWorkingDate(daily));
 	daily->tmorrowWeekdayNum = subZeller(getWorkingDate(daily) + ONE_DAY_SEC);
 
@@ -109,10 +107,9 @@ int getSplitCount(void) {
 }
 
 /* Working Date */
-int setWorkingDate(DailyWorkHours *daily, const char *strYMD) {
+int setWorkingDate(DailyWorkHours *daily, char *strYMD) {
 	struct tm tm_struct;
 	char *ymd[3], ymd_temp[(int)strlen(strYMD)+1];
-
 	strcpy(ymd_temp, strYMD);
 	split(ymd_temp, '/', ymd, WORKING_HOUR_PERIOD_CHR_LEN);
 
