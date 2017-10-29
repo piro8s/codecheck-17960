@@ -17,9 +17,11 @@ int isERROR_P(char *input) {
 }
 
 int initTotalWorkHours(char *in, TotalWorkHours *total) {
-	char *del;
-	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
-	if (delch(in, '/', del, TARGET_YEAR_MONTH_CHR_LEN) != 1) return 900;;
+	printf("%s\n", in);
+	char *del; 
+	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
+	delch(in, '/', del, TARGET_YEAR_MONTH_CHR_LEN);
+	// printf("%s\n", del);
 
 	total->yearMonth = atoi(del);
 	total->workingHours = (time_t)0;
