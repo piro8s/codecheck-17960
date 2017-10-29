@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 		// if (argv[1][i] == '/') {
 		// printf("%d\n", i);
 		// if (i >= 7) break;
-		printf("%s\n", argv[1]+5);
+		// printf("%s\n", argv[1]+5);
 		// if ('/' == argv[1][i]) {
 		// // if (strncmp("/", argv[1]+i, 1) == 0) {
 		// 	j++;
@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 	// printf("%d\n", roundSecToHour(total->nonlegalHolydayWH));
 	// printf("%d\n", roundSecToHour(total->legalHolydayWH));
 
-	// printf("%d\n", 0);
+	printf("%d\n", 0);
 	printf("%d\n", 0);
 	printf("%d\n", 0);
 	printf("%d\n", 0);
