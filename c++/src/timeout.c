@@ -3,7 +3,7 @@
 int scanfWithTimeout(char *format, char *input, int t) {
 	// int imput;
 	struct sigaction sa;
-	struct itimerval itimer = {{0, t*1000}, {0, t*1000}};
+	struct itimerval itimer = {{0, t}, {0, t}};
 	void myhandler(int no) { input[0] = '0'; }//タイムアウトしたときのメッセージ
 
 	// シグナルハンドラの設定
