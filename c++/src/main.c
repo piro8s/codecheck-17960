@@ -17,7 +17,6 @@ int main(int argc, char *argv[]) {
 	int initTWH = initTotalWorkHours(in_ym, total);
 	if (initTWH != SUCCESS) return initTWH;
 
-printf("in_ym+4%s\n", in_ym+4);
 //*
 	while(1) {
 	// for (i=2; i<=argc; i++) {
