@@ -1,9 +1,14 @@
 // #include<bits/stdc++.h>
 #include "working.h"
+#include "timeout.h"
+
+#define WAITING_SEC 1
 
 int main() {
-	char *in_ym = (char *)malloc((TARGET_YEAR_MONTH_CHR_LEN+1)*sizeof(char));
-	char *in_wh = (char *)malloc((WORKING_HOUR_PERIOD_CHR_LEN+1)*sizeof(char));
+	void callbackFunc(int signo) {
+		return;
+	}
+	char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
 	int i=0, j=0;
 
@@ -15,16 +20,17 @@ int main() {
 	// if (initTWH == ERROR_P) return 1;
 
 	while(1) {
+		char *in_wh = (char *)calloc(WORKING_HOUR_PERIOD_CHR_LEN+1, sizeof(char));
+		DailyWorkHours *daily = (DailyWorkHours *)malloc(sizeof(DailyWorkHours));
 		static time_t temp_weeklyWH = (time_t)0;
 		static int lastWorkDay = 0;
 		static int lastWorkWeekday = 7;
-		DailyWorkHours *daily = (DailyWorkHours *)malloc(sizeof(DailyWorkHours));
 
-		scanf("%60[ 0-9/:-]", in_wh);
+		scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAITING_SEC);
+		if (in_wh[0] == '0') break;
 		flush();
 
 		int initDWH = initDailyWorkHours(in_wh, daily);
-
 		if (initDWH == END) break;
 		// else if (initDWH == ERROR_P) return 123;
 		else if (initDWH >= 900) return initDWH;
@@ -43,16 +49,13 @@ int main() {
 		else if (culcWH == ERROR_P) return 456;
 
 		free(daily);
+		free(in_wh);
 		i++;
 	}
-// 2017/01
-// 2017/01/16 08:00-12:00 13:00-18:00
-// 2017/01/17 08:00-12:00 13:00-18:00
-// 2017/01/18 08:00-12:00 13:00-18:00
-// 2017/01/19 08:00-12:00 13:00-17:00
-// 2017/01/20 08:00-12:00 13:00-21:00
 
-	// printf("%d\n", roundSecToHour(total->nomalWH));
+
+_SHOW:
+	printf("%d\n\n", roundSecToHour(total->workingHours));
 	printf("%d\n", roundSecToHour(total->fixedOWH));
 	printf("%d\n", roundSecToHour(total->legalOWH));
 	printf("%d\n", roundSecToHour(total->midnightOWH));
@@ -61,3 +64,4 @@ int main() {
 
 	return 0;
 }
+

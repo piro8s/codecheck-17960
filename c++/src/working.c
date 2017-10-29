@@ -60,12 +60,12 @@ int initDailyWorkHours(char *in, DailyWorkHours *daily) {
 	if (isEnd(in)==END) return END;
 
 	splitCount = split(in, ' ', splited);
-	if (splitCount < 1) return ERROR_P;
+	if (splitCount < 1) return 900;
 	for (i=0; i<splitCount; i++) {
 		daily->workPeriod[i] = splited[i+1];
 	}
 
-	if (setWorkingDate(daily, splited[0]) == ERROR_P) return ERROR_P;
+	if (setWorkingDate(daily, splited[0]) == ERROR_P) return 901;
 	setOpeningTime(getWorkingDate(daily), EIGHT_HOUR_SEC);
 	setClosingTime(getWorkingDate(daily), SIXTEEN_HOUR_SEC);
 	setLateNightTime(getWorkingDate(daily), TWENTY_TWO_HOUR_SEC);
