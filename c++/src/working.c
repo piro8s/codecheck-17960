@@ -17,9 +17,9 @@ int isERROR_P(char *input) {
 }
 
 int initTotalWorkHours(char *in, TotalWorkHours *total) {
-	// if (strlen(in) != 7) return ERROR_P;
 	char *del;
 	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
+	delch(in, '/', del)
 	// if (delch(in, '/', del) != 1) return ERROR_P;
 
 	total->yearMonth = atoi(del);
