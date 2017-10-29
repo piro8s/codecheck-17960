@@ -21,7 +21,6 @@ int main(int argc, char *argv[]) {
 //*
 	int initTWH = initTotalWorkHours(in_ym, total);
 	if (initTWH != SUCCESS) return initTWH;
-	printf("%d\n", total->yearMonth);
 //*/
 //*
 	while(1) {
@@ -32,13 +31,13 @@ int main(int argc, char *argv[]) {
 		static int lastWorkDay = 0;
 		static int lastWorkWeekday = 7;
 
-		scanf("%60[ 0-9/:-]", in_wh);
-		flush();
-
-		printf("%s\n", in_wh);
-		// int flg =scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAITING_SEC);
-		// if (in_wh[0] == '0') break;
+		// scanf("%60[ 0-9/:-]", in_wh);
 		// flush();
+
+		int flg =scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAITING_SEC);
+		if (in_wh[0] == '0') break;
+		flush();
+		printf("%s\n", in_wh);
 
 		// int initDWH = initDailyWorkHours(argv[i], daily);
 		int initDWH = initDailyWorkHours(in_wh, daily);
