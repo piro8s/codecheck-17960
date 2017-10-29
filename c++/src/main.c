@@ -14,10 +14,12 @@ int main(int argc, char *argv[]) {
 	scanf("%7[0-9/]", in_ym);
 	flush();
 
-printf("%s\n", in_ym);
 	// char del[TARGET_YEAR_MONTH_CHR_LEN+1] = {'\0'}; 
-	// del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
+	char *del; 
+	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	// delch(argv[1], '/', del, strlen(argv[1]));
+	delch(in_ym, '/', del, TARGET_YEAR_MONTH_CHR_LEN);
+	printf("%s\n", del);
 	// for (i=0; i<TARGET_YEAR_MONTH_CHR_LEN; i++) {
 	// while (1) {
 	// for (i=0; i<7; i++) {
@@ -93,6 +95,7 @@ printf("%s\n", in_ym);
 	printf("%d\n", 0);
 
 	// free(total);
+	free(del);
 	free(in_ym);
 	return 0;
 }
