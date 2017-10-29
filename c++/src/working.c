@@ -26,9 +26,12 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 	if (strlen(in) <= 7) {
 		// delch(in, '/', del);
 		int i=0, j=0;
-		char c = '/';
+		char c = '2';
 		int len = strlen(in);
-		
+
+		if (in[0] == c) return 800;
+		else return 801;
+
 
 		// for (i=0; i<strlen(in); i++) {
 		// 	if (in[i] == c) {
