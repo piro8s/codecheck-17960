@@ -16,11 +16,11 @@ int main(int argc, char *argv[]) {
 	//Target Year-Month
 	// scanf("%7[0-9/]", in_ym);
 	// flush();
-/*
 	int initTWH = initTotalWorkHours(argv[1], total);
 	// int initTWH = initTotalWorkHours(in_ym, total);
 	if (initTWH == ERROR_P) return 100;
 
+/*
 	// while(1) {
 	for (i=2; i<=argc; i++) {
 		// char *in_wh = (char *)calloc(WORKING_HOUR_PERIOD_CHR_LEN+1, sizeof(char));
