@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
 	// delch(argv[1], '/', del, strlen(argv[1]));
 	for (i=0; i<TARGET_YEAR_MONTH_CHR_LEN; i++) {
-		if (argv[1][i] == '/') {
+		if ((int)argv[1][i] == (int)'/') {
 			j++;
 			continue;
 		}
