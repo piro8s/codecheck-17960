@@ -6,17 +6,16 @@
 #define WAITING_SEC 3
 
 int main(int argc, char *argv[]) {
+	printf("%d\n", argv[1][1]);
 	// char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
-	TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
-	int i=0, j=0;
+	// TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
+	// int i=0, j=0;
 
 	//Target Year-Month
 	// scanf("%7[0-9/]", in_ym);
 	// flush();
 
-	char in_ym2[TARGET_YEAR_MONTH_CHR_LEN] = {'\0'};
-	memmove(in_ym2, argv[1], TARGET_YEAR_MONTH_CHR_LEN);
-	char del[TARGET_YEAR_MONTH_CHR_LEN+1] = {'\0'}; 
+	// char del[TARGET_YEAR_MONTH_CHR_LEN+1] = {'\0'}; 
 	// del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	// delch(argv[1], '/', del, strlen(argv[1]));
 	// for (i=0; i<TARGET_YEAR_MONTH_CHR_LEN; i++) {
@@ -25,8 +24,6 @@ int main(int argc, char *argv[]) {
 		// if (argv[1][i] == '/') {
 		// printf("%d\n", i);
 		// if (i >= 7) break;
-	int o = '0';
-		printf("%d\n", atoi(in_ym2));
 		// if ('/' == argv[1][i]) {
 		// // if (strncmp("/", argv[1]+i, 1) == 0) {
 		// 	j++;
@@ -95,7 +92,7 @@ int main(int argc, char *argv[]) {
 	printf("%d\n", 0);
 	printf("%d\n", 0);
 
-	free(total);
+	// free(total);
 	return 0;
 }
 
