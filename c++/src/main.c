@@ -14,6 +14,8 @@ int main(int argc, char *argv[]) {
 	// scanf("%7[0-9/]", in_ym);
 	// flush();
 
+	char in_ym2[TARGET_YEAR_MONTH_CHR_LEN] = {'\0'};
+	memmove(in_ym2, argv[1], TARGET_YEAR_MONTH_CHR_LEN);
 	char del[TARGET_YEAR_MONTH_CHR_LEN+1] = {'\0'}; 
 	// del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	// delch(argv[1], '/', del, strlen(argv[1]));
@@ -24,7 +26,7 @@ int main(int argc, char *argv[]) {
 		// printf("%d\n", i);
 		// if (i >= 7) break;
 	int o = '0';
-		printf("%d\n", o);
+		printf("%d\n", atoi(in_ym2));
 		// if ('/' == argv[1][i]) {
 		// // if (strncmp("/", argv[1]+i, 1) == 0) {
 		// 	j++;
