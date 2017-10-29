@@ -24,14 +24,14 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 
 	char del[TARGET_YEAR_MONTH_CHR_LEN];
 		// return __LINE__;
-	if (strlen(in) <= 7) {
+	if ((int)strlen(in) <= 7) {
 		return __LINE__;
 		// delch(in, '/', del);
 		int i=0, j=0;
 		return __LINE__;
 		char c = '2';
 		return __LINE__;
-		int len = strlen(in);
+		int len = (int)strlen(in);
 		return __LINE__;
 		// return 800;
 		if (in[0] == c) return 801;
@@ -154,7 +154,7 @@ int getSplitCount(void) {
 /* Working Date */
 int setWorkingDate(DailyWorkHours *daily, const char *strYMD) {
 	struct tm tm_struct;
-	char *ymd[3], ymd_temp[strlen(strYMD)+1];
+	char *ymd[3], ymd_temp[(int)strlen(strYMD)+1];
 
 	strcpy(ymd_temp, strYMD);
 	split(ymd_temp, '/', ymd);
