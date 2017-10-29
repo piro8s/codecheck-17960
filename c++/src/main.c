@@ -3,7 +3,7 @@
 #include "include/timeout.h"
 
 
-#define WAITING_SEC 1
+#define WAIT_TIME 300 // u sec
 
 int main(int argc, char *argv[]) {
 	char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 		// scanf("%60[ 0-9/:-]", in_wh);
 		// flush();
 
-		int flg =scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAITING_SEC);
+		int flg =scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAIT_TIME);
 		if (in_wh[0] == '0') break;
 		flush();
 /*
