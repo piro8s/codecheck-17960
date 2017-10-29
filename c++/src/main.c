@@ -23,7 +23,7 @@ int main() {
 		static int lastWorkDay = 0;
 		static int lastWorkWeekday = 7;
 
-		int flg = scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAITING_SEC);
+		int flg =scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAITING_SEC);
 		if (in_wh[0] == '0') break;
 		flush();
 
@@ -52,7 +52,7 @@ int main() {
 
 
 _SHOW:
-	printf("%d\n\n", roundSecToHour(total->workingHours));
+	// printf("%d\n\n", roundSecToHour(total->workingHours));
 	printf("%d\n", roundSecToHour(total->fixedOWH));
 	printf("%d\n", roundSecToHour(total->legalOWH));
 	printf("%d\n", roundSecToHour(total->midnightOWH));
