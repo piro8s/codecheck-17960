@@ -14,8 +14,8 @@ int main(int argc, char *argv[]) {
 	// scanf("%7[0-9/]", in_ym);
 	// flush();
 
-	char *del; 
-	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
+	char del[TARGET_YEAR_MONTH_CHR_LEN+1] = {'\0'}; 
+	// del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	// delch(argv[1], '/', del, strlen(argv[1]));
 	for (i=0; i<TARGET_YEAR_MONTH_CHR_LEN; i++) {
 		// if (argv[1][i] == '/') {
