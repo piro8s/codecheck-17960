@@ -23,7 +23,7 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 	// if (delch(in, '/', del) != 1) return ERROR_P;
 
 	char del[TARGET_YEAR_MONTH_CHR_LEN];
-		return __LINE__;
+		// return __LINE__;
 	if (strlen(in) <= 7) {
 		return __LINE__;
 		// delch(in, '/', del);
