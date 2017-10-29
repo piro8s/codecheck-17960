@@ -39,9 +39,9 @@ int split(char *str, char c, char *outlist[] ) {
 }
 
 int delch(char *str, char c, char *out) {
-	int i, j;
+	int i=0, j=0;
 
-	for (i=0,j=0; i<strlen(str); i++) {
+	for (i=0; i<strlen(str); i++) {
 		if (str[i] == c) {
 			j++;
 			continue;
