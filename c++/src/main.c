@@ -9,14 +9,14 @@ int main(int argc, char *argv[]) {
 	TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
 	int i=0, j=0;
 
-	for (i=0; i<argc; i++) {
-		printf("argv[%d] : %s\n", i, argv[i]);
-	}
+	// for (i=0; i<argc; i++) {
+	// 	printf("argv[%d] : %s\n", i, argv[i]);
+	// }
 
 	//Target Year-Month
 	// scanf("%7[0-9/]", in_ym);
 	// flush();
-
+/*
 	int initTWH = initTotalWorkHours(argv[1], total);
 	// int initTWH = initTotalWorkHours(in_ym, total);
 	if (initTWH == ERROR_P) return 100;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
 		// free(in_wh);
 		// i++;
 	}
-
+*/
 
 _SHOW:
 	// printf("%d\n\n", roundSecToHour(total->workingHours));
