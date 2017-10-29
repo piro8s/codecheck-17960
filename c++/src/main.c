@@ -6,15 +6,15 @@
 #define WAITING_SEC 3
 
 int main(int argc, char *argv[]) {
-	printf("%s\n", argv[1]);
-	// char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
+	char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	// TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
 	// int i=0, j=0;
 
 	//Target Year-Month
-	// scanf("%7[0-9/]", in_ym);
-	// flush();
+	scanf("%7[0-9/]", in_ym);
+	flush();
 
+printf("%s\n", in_ym);
 	// char del[TARGET_YEAR_MONTH_CHR_LEN+1] = {'\0'}; 
 	// del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	// delch(argv[1], '/', del, strlen(argv[1]));
@@ -93,6 +93,7 @@ int main(int argc, char *argv[]) {
 	printf("%d\n", 0);
 
 	// free(total);
+	free(in_ym);
 	return 0;
 }
 
