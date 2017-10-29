@@ -3,7 +3,7 @@
 #include "include/timeout.h"
 
 
-#define WAITING_SEC 3
+#define WAITING_SEC 1
 
 int main(int argc, char *argv[]) {
 	char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));

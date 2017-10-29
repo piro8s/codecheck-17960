@@ -1,6 +1,6 @@
 #include "include/timeout.h"
 
-int scanfWithTimeout(char *format, char *input, int timeout) {
+int scanfWithTimeout(char *format, char *input, int t) {
 	// int imput;
 	struct sigaction sa;
 	struct itimerval itimer;
@@ -15,7 +15,7 @@ int scanfWithTimeout(char *format, char *input, int timeout) {
 		return -1;
 	}
 	// タイマーの設定
-	itimer.it_value.tv_sec = itimer.it_interval.tv_sec = timeout; // sec
+	itimer.it_value.tv_sec = itimer.it_interval.tv_sec = t; // sec
 	itimer.it_value.tv_usec = itimer.it_interval.tv_usec = 0; // micro sec
 	if(setitimer(ITIMER_REAL,&itimer,NULL) < 0) {
 		perror("setitimer");
