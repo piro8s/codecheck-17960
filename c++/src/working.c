@@ -27,14 +27,16 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 		// delch(in, '/', del);
 		int i=0, j=0;
 		char c = '/';
+		int len = strlen(in);
+		
 
-		for (i=0; i<strlen(in); i++) {
-			if (in[i] == c) {
-				j++;
-				continue;
-			}
-			del[i-j] = in[i];
-		}
+		// for (i=0; i<strlen(in); i++) {
+		// 	if (in[i] == c) {
+		// 		j++;
+		// 		continue;
+		// 	}
+		// 	del[i-j] = in[i];
+		// }
 
 	}
 	total->yearMonth = atoi(del);
