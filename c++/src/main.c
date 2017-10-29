@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]) {
 	char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
-	// TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
+	TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
 	// int i=0, j=0;
 
 	//Target Year-Month
@@ -17,32 +17,12 @@ int main(int argc, char *argv[]) {
 	// char del[TARGET_YEAR_MONTH_CHR_LEN+1] = {'\0'}; 
 	char *del; 
 	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
-	// delch(argv[1], '/', del, strlen(argv[1]));
 	delch(in_ym, '/', del, TARGET_YEAR_MONTH_CHR_LEN);
-	printf("%s\n", del);
-	// for (i=0; i<TARGET_YEAR_MONTH_CHR_LEN; i++) {
-	// while (1) {
-	// for (i=0; i<7; i++) {
-		// if (argv[1][i] == '/') {
-		// printf("%d\n", i);
-		// if (i >= 7) break;
-		// if ('/' == argv[1][i]) {
-		// // if (strncmp("/", argv[1]+i, 1) == 0) {
-		// 	j++;
-		// 	continue;
-		// }
-		// del[i-j] = argv[1][i];
-	// 	i = i + 1;
-	// }
-	// printf("argv[1]:%s\n", argv[1]);
-	// printf("strlen:%d\n", (int)strlen(argv[1]));
-	// printf("delch():%d\n", delch(argv[1], '/', del, strlen(argv[1])));
-	// printf("delch:%s\n", del);
-	// printf("%d\n", atoi(del));
-/*
+//*
 	int initTWH = initTotalWorkHours(argv[1], total);
 	// int initTWH = initTotalWorkHours(in_ym, total);
 	if (initTWH != SUCCESS) return initTWH;
+	printf("%d\n", total->yearMonth);
 //*/
 /*
 	// while(1) {
@@ -94,8 +74,7 @@ int main(int argc, char *argv[]) {
 	printf("%d\n", 0);
 	printf("%d\n", 0);
 
-	// free(total);
-	free(del);
+	free(total);
 	free(in_ym);
 	return 0;
 }
