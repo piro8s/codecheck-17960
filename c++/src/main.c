@@ -5,9 +5,6 @@
 #define WAITING_SEC 3
 
 int main() {
-	void callbackFunc(int signo) {
-		return;
-	}
 	char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
 	int i=0, j=0;
@@ -17,7 +14,7 @@ int main() {
 	flush();
 
 	int initTWH = initTotalWorkHours(in_ym, total);
-	if (initTWH == ERROR_P) return 1;
+	if (initTWH == ERROR_P) return 100;
 
 	while(1) {
 		char *in_wh = (char *)calloc(WORKING_HOUR_PERIOD_CHR_LEN+1, sizeof(char));
@@ -26,13 +23,13 @@ int main() {
 		static int lastWorkDay = 0;
 		static int lastWorkWeekday = 7;
 
-		scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAITING_SEC);
+		int flg = scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAITING_SEC);
 		if (in_wh[0] == '0') break;
 		flush();
 
 		int initDWH = initDailyWorkHours(in_wh, daily);
 		if (initDWH == END) break;
-		// else if (initDWH == ERROR_P) return 123;
+		// else if (initDWH == ERROR_P) return 101;
 		else if (initDWH >= 900) return initDWH;
 		if (isWorkingOnSameWeek(daily, lastWorkDay) == FALSE) temp_weeklyWH = (time_t)0;
 		lastWorkDay = getWorkingDayNum(daily);
@@ -46,7 +43,7 @@ int main() {
 		temp_weeklyWH = getWeeklyWHOf(daily);
 
 		if (culcWH == CONTINUE) continue;
-		else if (culcWH == ERROR_P) return 456;
+		else if (culcWH == ERROR_P) return 102;
 
 		free(daily);
 		free(in_wh);
