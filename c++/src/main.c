@@ -16,7 +16,14 @@ int main(int argc, char *argv[]) {
 
 	char *del; 
 	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
-	delch(argv[1], '/', del, strlen(argv[1]));
+	// delch(argv[1], '/', del, strlen(argv[1]));
+	for (i=0; i<TARGET_YEAR_MONTH_CHR_LEN; i++) {
+		if (argv[1][i] == '/') {
+			j++;
+			continue;
+		}
+		del[i-j] = argv[1][i];
+	}
 	// printf("argv[1]:%s\n", argv[1]);
 	// printf("strlen:%d\n", (int)strlen(argv[1]));
 	// printf("delch():%d\n", delch(argv[1], '/', del, strlen(argv[1])));
