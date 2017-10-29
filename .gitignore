@@ -2,4 +2,5 @@ test/node_modules/
 java/target/
 scala/target/
 python/**/*.pyc
+c++/**/*.o
 c++/src/ignored/
