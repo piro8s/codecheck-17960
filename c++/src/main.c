@@ -15,17 +15,17 @@ int main(int argc, char *argv[]) {
 	// flush();
 
 	char *del; 
-	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
+	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	// delch(argv[1], '/', del, strlen(argv[1]));
 	for (i=0; i<TARGET_YEAR_MONTH_CHR_LEN; i++) {
 		// if (argv[1][i] == '/') {
 		printf("%d\n", i);
 		printf("%d\n", atoi(&argv[1][i]));
-		if ('/' == argv[1][i]) {
-		// if (strncmp("/", argv[1]+i, 1) == 0) {
-			j++;
-			continue;
-		}
+		// if ('/' == argv[1][i]) {
+		// // if (strncmp("/", argv[1]+i, 1) == 0) {
+		// 	j++;
+		// 	continue;
+		// }
 		del[i-j] = argv[1][i];
 	}
 	// printf("argv[1]:%s\n", argv[1]);
