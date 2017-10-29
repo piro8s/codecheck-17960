@@ -19,7 +19,7 @@ int isERROR_P(char *input) {
 int initTotalWorkHours(char *in, TotalWorkHours *total) {
 	if (strlen(in) != 7) return ERROR_P;
 	char *del;
-	del = (char *)malloc((strlen(in)-searchc(in, '/'))*sizeof(char));
+	del = (char *)calloc(strlen(in)-searchc(in, '/'), sizeof(char));
 	if (delch(in, '/', del) != 1) return ERROR_P;
 
 	total->yearMonth = atoi(del);
@@ -358,9 +358,9 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 	tm_struct = localtime(&(daily->today));
 	for (i=0; i<getSplitCount(); i++) {
 		// 時刻を Time型 に変換する
-		char *period = (char *)malloc(12*sizeof(char));
-		char *start = (char *)malloc(6*sizeof(char));
-		char *end = (char *)malloc(6*sizeof(char));
+		char *period = (char *)calloc(12, sizeof(char));
+		char *start = (char *)calloc(6, sizeof(char));
+		char *end = (char *)calloc(6, sizeof(char));
 
 		// "HH:mm-HH:mm" --> "HH:mm", "HH:mm"
 		strcpy(period, daily->workPeriod[i]);

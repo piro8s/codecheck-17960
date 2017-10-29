@@ -2,7 +2,7 @@
 #include "working.h"
 #include "timeout.h"
 
-#define WAITING_SEC 1
+#define WAITING_SEC 3
 
 int main() {
 	void callbackFunc(int signo) {
@@ -17,7 +17,7 @@ int main() {
 	flush();
 
 	int initTWH = initTotalWorkHours(in_ym, total);
-	// if (initTWH == ERROR_P) return 1;
+	if (initTWH == ERROR_P) return 1;
 
 	while(1) {
 		char *in_wh = (char *)calloc(WORKING_HOUR_PERIOD_CHR_LEN+1, sizeof(char));
