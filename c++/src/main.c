@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]) {
 	// char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
-	TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
+	// TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
 	int i=0, j=0;
 
 	//Target Year-Month
@@ -63,11 +63,17 @@ int main(int argc, char *argv[]) {
 //*/
 
 	// printf("%d\n\n", roundSecToHour(total->workingHours));
-	printf("%d\n", roundSecToHour(total->fixedOWH));
-	printf("%d\n", roundSecToHour(total->legalOWH));
-	printf("%d\n", roundSecToHour(total->midnightOWH));
-	printf("%d\n", roundSecToHour(total->nonlegalHolydayWH));
-	printf("%d\n", roundSecToHour(total->legalHolydayWH));
+	// printf("%d\n", roundSecToHour(total->fixedOWH));
+	// printf("%d\n", roundSecToHour(total->legalOWH));
+	// printf("%d\n", roundSecToHour(total->midnightOWH));
+	// printf("%d\n", roundSecToHour(total->nonlegalHolydayWH));
+	// printf("%d\n", roundSecToHour(total->legalHolydayWH));
+
+	printf("%d\n", 0);
+	printf("%d\n", 0);
+	printf("%d\n", 0);
+	printf("%d\n", 0);
+	printf("%d\n", 0);
 
 	// free(total);
 	return 0;
