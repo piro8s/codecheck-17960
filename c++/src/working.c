@@ -166,6 +166,7 @@ int isEndOnMonth(DailyWorkHours *daily) {
 	}
 	//入力が月末(営業日)なら
 	if (getDate(daily->today) == getDate(eom)) return END;
+	return 0;
 }
 
 /* 同一週(月〜日)中の仕事か判定 */
