@@ -19,7 +19,6 @@ int main(int argc, char *argv[]) {
 	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	delch(in_ym, '/', del, TARGET_YEAR_MONTH_CHR_LEN);
 //*
-	// int initTWH = initTotalWorkHours(argv[1], total);
 	int initTWH = initTotalWorkHours(in_ym, total);
 	if (initTWH != SUCCESS) return initTWH;
 	// printf("%d\n", total->yearMonth);
