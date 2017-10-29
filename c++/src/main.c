@@ -14,7 +14,8 @@ int main(int argc, char *argv[]) {
 	// scanf("%7[0-9/]", in_ym);
 	// flush();
 
-	char *del; del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
+	char *del; 
+	// del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
 	// printf("argv[1]:%s\n", argv[1]);
 	// printf("strlen:%d\n", (int)strlen(argv[1]));
 	// printf("delch():%d\n", delch(argv[1], '/', del, strlen(argv[1])));
