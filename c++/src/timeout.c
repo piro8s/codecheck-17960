@@ -26,3 +26,4 @@ int scanfWithTimeout(char *format, char *input, int t) {
 
 	return 0;
 }
+
