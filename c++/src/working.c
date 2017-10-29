@@ -17,7 +17,7 @@ int isERROR_P(char *input) {
 }
 
 int initTotalWorkHours(char *in, TotalWorkHours *total) {
-	if (strlen(in) != 7) return ERROR_P;
+	// if (strlen(in) != 7) return ERROR_P;
 	char *del;
 	del = (char *)calloc(strlen(in)-searchc(in, '/'), sizeof(char));
 	if (delch(in, '/', del) != 1) return ERROR_P;
