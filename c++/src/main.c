@@ -4,30 +4,33 @@
 
 #define WAITING_SEC 3
 
-int main() {
-	char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
+int main(int argc, char *argv[]) {
+	// char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
 	int i=0, j=0;
 
 	//Target Year-Month
-	scanf("%7[0-9/]", in_ym);
-	flush();
+	// scanf("%7[0-9/]", in_ym);
+	// flush();
 
-	int initTWH = initTotalWorkHours(in_ym, total);
+	int initTWH = initTotalWorkHours(argv[1], total);
+	// int initTWH = initTotalWorkHours(in_ym, total);
 	if (initTWH == ERROR_P) return 100;
 
-	while(1) {
-		char *in_wh = (char *)calloc(WORKING_HOUR_PERIOD_CHR_LEN+1, sizeof(char));
+	// while(1) {
+	for (i=2; i<=argc; i++) {
+		// char *in_wh = (char *)calloc(WORKING_HOUR_PERIOD_CHR_LEN+1, sizeof(char));
 		DailyWorkHours *daily = (DailyWorkHours *)malloc(sizeof(DailyWorkHours));
 		static time_t temp_weeklyWH = (time_t)0;
 		static int lastWorkDay = 0;
 		static int lastWorkWeekday = 7;
 
-		int flg =scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAITING_SEC);
-		if (in_wh[0] == '0') break;
-		flush();
+		// int flg =scanfWithTimeout("%60[ 0-9/:-]", in_wh, WAITING_SEC);
+		// if (in_wh[0] == '0') break;
+		// flush();
 
-		int initDWH = initDailyWorkHours(in_wh, daily);
+		int initDWH = initDailyWorkHours(argv[i], daily);
+		// int initDWH = initDailyWorkHours(in_wh, daily);
 		if (initDWH == END) break;
 		// else if (initDWH == ERROR_P) return 101;
 		else if (initDWH >= 900) return initDWH;
@@ -46,8 +49,8 @@ int main() {
 		else if (culcWH == ERROR_P) return 102;
 
 		free(daily);
-		free(in_wh);
-		i++;
+		// free(in_wh);
+		// i++;
 	}
 
 
@@ -59,6 +62,7 @@ _SHOW:
 	printf("%d\n", roundSecToHour(total->nonlegalHolydayWH));
 	printf("%d\n", roundSecToHour(total->legalHolydayWH));
 
+	free(total);
 	return 0;
 }
 
