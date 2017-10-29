@@ -1,4 +1,3 @@
-#include <regex.h>
 #include "include/working.h"
 
 int splitCount;
@@ -18,62 +17,12 @@ int isERROR_P(char *input) {
 }
 
 int initTotalWorkHours(char *in, TotalWorkHours *total) {
-	// char *del;
-	// del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
-	// delch(in, '/', del);
-	// if (delch(in, '/', del) != 1) return ERROR_P;
+	char *del;
+	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
+	if (delch(in, '/', del, TARGET_YEAR_MONTH_CHR_LEN) != 1) return 900;;
 
-	char del[TARGET_YEAR_MONTH_CHR_LEN];
-		// return __LINE__;
-
-	regex_t preg; // 正規表現のオブジェクト
-	size_t num = 5;
-	regmatch_t pmatch[num]; // 正規表現にマッチしたインデックスを格納する構造体の配列
-	const char pattern[] = "([0-9]{4})/([0-9]{2})"; // マッチする文字列
-	int i=0, j=0, k=0;
-	if (regcomp(&preg, pattern, REG_EXTENDED|REG_NEWLINE) != 0) {
-		return 800;
-	}
-	if (regexec(&preg, in, num, pmatch, 0) != 0) {
-		return 801;
-	} else {
-		for (i = 1; i < num; i++) {
-			if (pmatch[i].rm_so >= 0 && pmatch[i].rm_eo >= 0) {
-				for (j = pmatch[i].rm_so ; j < pmatch[i].rm_eo; j++) {
-					del[k] = in[j];
-					k++;
-				}
-			}
-		}
-	}
-	regfree(&preg);
-
-	printf("del:%s\n", del);
-
-	// if ((int)strlen(in) <= 7) {
-	// 	return __LINE__;
-	// 	// delch(in, '/', del);
-	// 	int i=0, j=0;
-	// 	return __LINE__;
-	// 	char c = '2';
-	// 	return __LINE__;
-	// 	int len = (int)strlen(in);
-	// 	return __LINE__;
-	// 	// return 800;
-	// 	if (in[0] == c) return 801;
-	// 	else return 802;
-
-
-	// 	// for (i=0; i<strlen(in); i++) {
-	// 	// 	if (in[i] == c) {
-	// 	// 		j++;
-	// 	// 		continue;
-	// 	// 	}
-	// 	// 	del[i-j] = in[i];
-	// 	// }
-
-	// }
 	total->yearMonth = atoi(del);
+	total->workingHours = (time_t)0;
 	total->nomalWH = (time_t)0;
 	total->fixedOWH = (time_t)0;
 	total->legalOWH = (time_t)0;
@@ -81,7 +30,7 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 	total->nonlegalHolydayWH = (time_t)0;
 	total->legalHolydayWH = (time_t)0;
 
-	// free(del);
+	free(del);
 	return SUCCESS;
 }
 
@@ -92,13 +41,13 @@ int initDailyWorkHours(char *in, DailyWorkHours *daily) {
 
 	if (isEnd(in)==END) return END;
 
-	splitCount = split(in, ' ', splited);
-	if (splitCount < 1) return 900;
+	splitCount = split(in, ' ', splited, WORKING_HOUR_PERIOD_CHR_LEN);
+	if (splitCount < 1) return 910;
 	for (i=0; i<splitCount; i++) {
 		daily->workPeriod[i] = splited[i+1];
 	}
 
-	if (setWorkingDate(daily, splited[0]) == ERROR_P) return 901;
+	if (setWorkingDate(daily, splited[0]) == ERROR_P) return 911;
 	setOpeningTime(getWorkingDate(daily), EIGHT_HOUR_SEC);
 	setClosingTime(getWorkingDate(daily), SIXTEEN_HOUR_SEC);
 	setLateNightTime(getWorkingDate(daily), TWENTY_TWO_HOUR_SEC);
@@ -165,7 +114,7 @@ int setWorkingDate(DailyWorkHours *daily, const char *strYMD) {
 	char *ymd[3], ymd_temp[(int)strlen(strYMD)+1];
 
 	strcpy(ymd_temp, strYMD);
-	split(ymd_temp, '/', ymd);
+	split(ymd_temp, '/', ymd, WORKING_HOUR_PERIOD_CHR_LEN);
 
 	tm_struct.tm_year = atoi(ymd[0]) - 1900;
 	tm_struct.tm_mon = atoi(ymd[1]) - 1;
@@ -199,38 +148,6 @@ int getWorkingDayNum(DailyWorkHours *daily) {
 /* getter: Working Weekday Number */
 int getWorkingWeekdayNum(DailyWorkHours *daily) {
 	return daily->weekdayNum;
-}
-
-int isYearMonthDay(char *in) {
-	regex_t preg; // 正規表現のオブジェクト
-	size_t num = 5;
-	regmatch_t pmatch[num]; // 正規表現にマッチしたインデックスを格納する構造体の配列
-	const char pattern[] = "([0-9]{4})/([0-9]{2})/([0-9]{2})"; // マッチする文字列
-	int i=0, j=0;
-	if (regcomp(&preg, pattern, REG_EXTENDED|REG_NEWLINE) != 0) {
-		printf("正規表現のコンパイルに失敗しました\n");
-		return -1;
-	}
-	if (regexec(&preg, in, num, pmatch, 0) != 0) {
-		printf("マッチしませんでした\n");
-	} else {
-		for (i = 0; i < num; i++) {
-			if (pmatch[i].rm_so >= 0 && pmatch[i].rm_eo >= 0) {
-				// マッチしたインデックスと文字列の表示
-				printf("マッチしたインデックスは%d~%d, in: ", (int)pmatch[i].rm_so, (int)pmatch[i].rm_eo);
-				for (j = pmatch[i].rm_so ; j < pmatch[i].rm_eo; j++) {
-					putchar(in[j]);
-				}
-			}
-			printf("\n");
-		}
-	}
-	regfree(&preg);
-	return 0;
-}
-
-int isHours(char *in) {
-	return 0;
 }
 
 int isEndOnMonth(DailyWorkHours *daily) {
@@ -446,15 +363,15 @@ int culcWorkHours(int targetYearMonth, DailyWorkHours *daily) {
 
 		// "HH:mm-HH:mm" --> "HH:mm", "HH:mm"
 		strcpy(period, daily->workPeriod[i]);
-		split(period, '-', sewt);
+		split(period, '-', sewt, 12);
 
 		// "HH:mm" --> "HH", "mm"
 		strcpy(start, sewt[0]);
-		split(start, ':', shm);
+		split(start, ':', shm, 6);
 
 		// "HH:mm" --> "HH", "mm"
 		strcpy(end, sewt[1]);
-		split(end, ':', ehm);
+		split(end, ':', ehm, 6);
 
 		//start time
 		hour = atoi(shm[0]);

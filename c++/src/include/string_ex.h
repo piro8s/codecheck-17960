@@ -11,7 +11,7 @@ void lntrim(char *);
  * @param char *		c		The target character.
  * @return int			cnt		The number of trimed characters.
  */
-int searchc(char *, char);
+int searchc(char *, char, int);
 
 /**
  * Split string by separater string
@@ -20,7 +20,7 @@ int searchc(char *, char);
  * @param char *[]		outlist		The output array of strings.
  * @return int			cnt		The split count.
  */
-int split(char *, char, char *[]);
+int split(char *, char, char *[], int);
 
 /**
  * delch a character:c from string.
@@ -29,4 +29,4 @@ int split(char *, char, char *[]);
  * @param char *		out		The string with delchd character.
  * @return int			cnt		The delchd count.
  */
-int delch(char *, char, char *);
+int delch(char *, char, char *, int);

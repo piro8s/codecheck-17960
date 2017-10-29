@@ -12,18 +12,18 @@ void lntrim(char *str) {
 	}
 }
 
-int searchc(char *str, char c){
+int searchc(char *str, char c, int strlen){
 	int i, cnt = 0;
 
-	for(i=0; i<(int)strlen(str); i++){
+	for(i=0; i<strlen; i++){
 		if(str[i] == c) cnt++;
 	}
 	return cnt;
 }
 
-int split(char *str, char c, char *outlist[] ) {
+int split(char *str, char c, char *outlist[], int strlen) {
 	char *tk;
-	int cnt = searchc(str, c);
+	int cnt = searchc(str, c, strlen);
 	int i;
 
 	if (cnt < 1) return cnt;
@@ -38,10 +38,10 @@ int split(char *str, char c, char *outlist[] ) {
 	return cnt;
 }
 
-int delch(char *str, char c, char *out) {
+int delch(char *str, char c, char *out, int strlen) {
 	int i=0, j=0;
 
-	for (i=0; i<(int)strlen(str); i++) {
+	for (i=0; i<strlen; i++) {
 		if (str[i] == c) {
 			j++;
 			continue;
