@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]) {
 	// char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
-	// TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
+	TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
 	int i=0, j=0;
 
 	//Target Year-Month
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
 	printf("%d\n", 0);
 	printf("%d\n", 0);
 
-	// free(total);
+	free(total);
 	return 0;
 }
 
