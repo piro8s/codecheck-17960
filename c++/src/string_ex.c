@@ -1,5 +1,5 @@
-#include "string_ex.h"
-#include "stdio_ex.h"
+#include "include/string_ex.h"
+#include "include/stdio_ex.h"
 
 void lntrim(char *str) {
 	int i = 0;

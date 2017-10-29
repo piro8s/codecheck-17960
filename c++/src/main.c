@@ -1,5 +1,5 @@
 // #include<bits/stdc++.h>
-#include "working.h"
+#include "include/working.h"
 
 
 #define WAITING_SEC 3
@@ -8,6 +8,10 @@ int main(int argc, char *argv[]) {
 	// char *in_ym = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	TotalWorkHours *total = (TotalWorkHours *)malloc(sizeof(TotalWorkHours));
 	int i=0, j=0;
+
+	for (i=0; i<argc; i++) {
+		printf("argv[%d] : %s\n", i, argv[i]);
+	}
 
 	//Target Year-Month
 	// scanf("%7[0-9/]", in_ym);
