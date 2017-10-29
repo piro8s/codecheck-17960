@@ -20,7 +20,7 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 	// if (strlen(in) != 7) return ERROR_P;
 	char *del;
 	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
-	if (delch(in, '/', del) != 1) return ERROR_P;
+	// if (delch(in, '/', del) != 1) return ERROR_P;
 
 	total->yearMonth = atoi(del);
 	total->nomalWH = (time_t)0;
