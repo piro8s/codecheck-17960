@@ -3,7 +3,7 @@
 int scanfWithTimeout(char *format, char *input, int t) {
 	// int imput;
 	struct sigaction sa;
-	struct itimerval itimer;
+	struct itimerval itimer = {{0, t*1000}, {0, t*1000}};
 	void myhandler(int no) { input[0] = '0'; }//タイムアウトしたときのメッセージ
 
 	// シグナルハンドラの設定
@@ -15,9 +15,9 @@ int scanfWithTimeout(char *format, char *input, int t) {
 		return -1;
 	}
 	// タイマーの設定
-	itimer.it_value.tv_sec = itimer.it_interval.tv_sec = t; // sec
-	itimer.it_value.tv_usec = itimer.it_interval.tv_usec = 0; // micro sec
-	if(setitimer(ITIMER_REAL,&itimer,NULL) < 0) {
+	// itimer.it_value.tv_sec = itimer.it_interval.tv_sec = t; // sec
+	// itimer.it_value.tv_usec = itimer.it_interval.tv_usec = 0; // micro sec
+	if(setitimer(ITIMER_REAL, &itimer, NULL) < 0) {
 		perror("setitimer");
 		return -1;
 	}
