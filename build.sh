@@ -17,4 +17,4 @@ ROOT=$(cd $(dirname $0) && pwd)
 ### C++ ###
  cd $ROOT/c++
  #c++ -o app.o src/*.cpp
- gcc -I ./src/include -o app.o src/*.c
+ gcc -o app.o src/*.c
