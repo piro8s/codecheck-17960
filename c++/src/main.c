@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 		// if (argv[1][i] == '/') {
 		// printf("%d\n", i);
 		// if (i >= 7) break;
-	int o = argv[1][0] - '0';
+	int o = '0';
 		printf("%d\n", o);
 		// if ('/' == argv[1][i]) {
 		// // if (strncmp("/", argv[1]+i, 1) == 0) {
