@@ -28,9 +28,9 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 		int i=0, j=0;
 		char c = '2';
 		int len = strlen(in);
-
-		if (in[0] == c) return 800;
-		else return 801;
+		return 800;
+		if (in[0] == c) return 801;
+		else return 802;
 
 
 		// for (i=0; i<strlen(in); i++) {
