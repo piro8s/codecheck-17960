@@ -17,11 +17,15 @@ int isERROR_P(char *input) {
 }
 
 int initTotalWorkHours(char *in, TotalWorkHours *total) {
-	char *del;
-	del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
-	delch(in, '/', del);
+	// char *del;
+	// del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN, sizeof(char));
+	// delch(in, '/', del);
 	// if (delch(in, '/', del) != 1) return ERROR_P;
 
+	char del[TARGET_YEAR_MONTH_CHR_LEN];
+	if (strlen(in) <= 7) {
+		delch(in, '/', del);
+	}
 	total->yearMonth = atoi(del);
 	total->nomalWH = (time_t)0;
 	total->fixedOWH = (time_t)0;
@@ -30,7 +34,7 @@ int initTotalWorkHours(char *in, TotalWorkHours *total) {
 	total->nonlegalHolydayWH = (time_t)0;
 	total->legalHolydayWH = (time_t)0;
 
-	free(del);
+	// free(del);
 	return SUCCESS;
 }
 
