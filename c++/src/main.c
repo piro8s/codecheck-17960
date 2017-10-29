@@ -23,7 +23,8 @@ int main(int argc, char *argv[]) {
 		// if (argv[1][i] == '/') {
 		// printf("%d\n", i);
 		// if (i >= 7) break;
-		printf("%d\n", atoi(argv[1]+6));
+	int o = atoi(argv[1]);
+		printf("%d\n", o);
 		// if ('/' == argv[1][i]) {
 		// // if (strncmp("/", argv[1]+i, 1) == 0) {
 		// 	j++;
