@@ -2,6 +2,15 @@
 #include "include/working.h"
 #include "include/timeout.h"
 
+/***
+ *
+ * 課題: 以下の課題を修正する必要がある
+ * 		・労働時間入力時のSegmentation fault: 11
+ *		・setWorkingDate()での(mktime()での)Illegal instruction: 4
+ *
+ */
+
+
 
 #define WAIT_TIME 150 // u sec
 
