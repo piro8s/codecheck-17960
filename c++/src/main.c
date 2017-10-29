@@ -18,20 +18,20 @@ int main(int argc, char *argv[]) {
 	// del = (char *)calloc(TARGET_YEAR_MONTH_CHR_LEN+1, sizeof(char));
 	// delch(argv[1], '/', del, strlen(argv[1]));
 	// for (i=0; i<TARGET_YEAR_MONTH_CHR_LEN; i++) {
-	while (1) {
+	// while (1) {
 	// for (i=0; i<7; i++) {
 		// if (argv[1][i] == '/') {
 		// printf("%d\n", i);
-		if (i >= 7) break;
-		printf("%c\n", argv[1][i]);
+		// if (i >= 7) break;
+		printf("%c\n", argv[1][0]);
 		// if ('/' == argv[1][i]) {
 		// // if (strncmp("/", argv[1]+i, 1) == 0) {
 		// 	j++;
 		// 	continue;
 		// }
 		// del[i-j] = argv[1][i];
-		i = i + 1;
-	}
+	// 	i = i + 1;
+	// }
 	// printf("argv[1]:%s\n", argv[1]);
 	// printf("strlen:%d\n", (int)strlen(argv[1]));
 	// printf("delch():%d\n", delch(argv[1], '/', del, strlen(argv[1])));
@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 	// printf("%d\n", roundSecToHour(total->nonlegalHolydayWH));
 	// printf("%d\n", roundSecToHour(total->legalHolydayWH));
 
-	printf("%d\n", 0);
+	// printf("%d\n", 0);
 	printf("%d\n", 0);
 	printf("%d\n", 0);
 	printf("%d\n", 0);
