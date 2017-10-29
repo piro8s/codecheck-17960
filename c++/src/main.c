@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 //*
 	int initTWH = initTotalWorkHours(in_ym, total);
 	if (initTWH != SUCCESS) return initTWH;
-	// printf("%d\n", total->yearMonth);
+	printf("%d\n", total->yearMonth);
 //*/
 /*
 	// while(1) {
