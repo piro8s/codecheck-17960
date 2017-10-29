@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 	// flush();
 	int initTWH = initTotalWorkHours(argv[1], total);
 	// int initTWH = initTotalWorkHours(in_ym, total);
-	if (initTWH == ERROR_P) return 100;
+	if (initTWH != SUCCESS) return initTWH;
 
 /*
 	// while(1) {
